@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>發文管理系統</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0f1419;
+            --bg-card: #1a1f2e;
+            --bg-input: #242938;
+            --neon-blue: #4d9fff;
+            --neon-purple: #b86bff;
+            --neon-green: #00ff9f;
+            --neon-orange: #ffab40;
+            --neon-pink: #ff4d9f;
+            --text-primary: #e8eaed;
+            --text-secondary: #8b92a8;
+            --border: #2d3548;
+            --shadow-glow: rgba(77, 159, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1535 50%, #0f1419 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(77, 159, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(184, 107, 255, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--neon-orange), var(--neon-pink), var(--neon-purple));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+            border: 2px solid rgba(77, 159, 255, 0.3);
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+            border: 2px solid rgba(184, 107, 255, 0.3);
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.3s;
+            border: 2px solid rgba(0, 255, 159, 0.3);
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: 0.4s;
+            border: 2px solid rgba(255, 171, 64, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+        }
+
+        .stat-card:hover::before {
+            opacity: 0.6;
+        }
+
+        .stat-card:nth-child(1)::before { color: var(--neon-blue); }
+        .stat-card:nth-child(2)::before { color: var(--neon-purple); }
+        .stat-card:nth-child(3)::before { color: var(--neon-green); }
+        .stat-card:nth-child(4)::before { color: var(--neon-orange); }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            display: block;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card:nth-child(1) .stat-number { color: var(--neon-blue); }
+        .stat-card:nth-child(2) .stat-number { color: var(--neon-purple); }
+        .stat-card:nth-child(3) .stat-number { color: var(--neon-green); }
+        .stat-card:nth-child(4) .stat-number { color: var(--neon-orange); }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 300;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            animation: fadeInUp 0.6s ease-out 0.5s;
+            animation-fill-mode: both;
+        }
+
+        .card h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: var(--bg-input);
+            color: var(--text-primary);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 0 3px rgba(77, 159, 255, 0.1), 0 0 20px rgba(77, 159, 255, 0.2);
+            background: var(--bg-card);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .doc-number-display {
+            background: linear-gradient(135deg, rgba(77, 159, 255, 0.1), rgba(184, 107, 255, 0.1));
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 1.5rem 0;
+            letter-spacing: 3px;
+            box-shadow: 0 0 30px rgba(77, 159, 255, 0.2);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(77, 159, 255, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(77, 159, 255, 0.4);
+            }
+        }
+
+        .doc-number-placeholder {
+            background: rgba(45, 53, 72, 0.3);
+            border-color: var(--border);
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            animation: none;
+            box-shadow: none;
+        }
+
+        .btn {
+            padding: 0.9rem 1.8rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(77, 159, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 30px rgba(77, 159, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card);
+            border-color: var(--neon-blue);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--neon-green), #00cc7f);
+            color: var(--bg-dark);
+            box-shadow: 0 4px 20px rgba(0, 255, 159, 0.3);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 8px 30px rgba(0, 255, 159, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--neon-orange), #ff8c40);
+            color: var(--bg-dark);
+            box-shadow: 0 4px 20px rgba(255, 171, 64, 0.3);
+        }
+
+        .btn-warning:hover {
+            box-shadow: 0 8px 30px rgba(255, 171, 64, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff4d6d, #c9184a);
+            color: white;
+            box-shadow: 0 4px 20px rgba(255, 77, 109, 0.3);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 8px 30px rgba(255, 77, 109, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .search-section {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .export-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-input);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, rgba(77, 159, 255, 0.1), rgba(184, 107, 255, 0.1));
+            border-bottom: 2px solid var(--neon-blue);
+        }
+
+        th {
+            padding: 1.2rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(77, 159, 255, 0.05);
+        }
+
+        .doc-number {
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            color: var(--neon-blue);
+            font-size: 0.95rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background: rgba(255, 171, 64, 0.2);
+            color: var(--neon-orange);
+            border: 1px solid var(--neon-orange);
+        }
+
+        .status-completed {
+            background: rgba(0, 255, 159, 0.2);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 3% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 60px rgba(77, 159, 255, 0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+        }
+
+        .file-upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            background: var(--bg-input);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--neon-blue);
+            background: rgba(77, 159, 255, 0.05);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--neon-blue);
+            background: rgba(77, 159, 255, 0.1);
+            box-shadow: 0 0 30px rgba(77, 159, 255, 0.2);
+        }
+
+        .file-list {
+            margin-top: 1rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem;
+            background: var(--bg-input);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .file-item:hover {
+            border-color: var(--neon-blue);
+            background: rgba(77, 159, 255, 0.05);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .file-icon {
+            font-size: 1.5rem;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .file-size {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .info-box {
+            background: rgba(255, 171, 64, 0.1);
+            border-left: 4px solid var(--neon-orange);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* 滾動條樣式 */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-blue);
+        }
+
+        @media (max-width: 1400px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .search-section, .export-section {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 發文管理系統</h1>
+            <p class="subtitle">智能編號生成 · 暫存管理 · 文件追蹤</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <span class="stat-number" id="totalDocs">0</span>
+                <span class="stat-label">總發文數</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏳</div>
+                <span class="stat-number" id="pendingDocs">0</span>
+                <span class="stat-label">待補資料</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <span class="stat-number" id="completedDocs">0</span>
+                <span class="stat-label">已完成</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <span class="stat-number" id="todayDocs">0</span>
+                <span class="stat-label">今日發文</span>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- 左側：編號生成器 -->
+            <div class="card">
+                <h2>🔢 生成發文編號</h2>
+                
+                <form id="generatorForm">
+                    <div class="form-group">
+                        <label>公司代號 *</label>
+                        <select id="genCompanyCode" required>
+                            <option value="">請選擇公司</option>
+                            <option value="宇軒">宇軒能源科技股份有限公司 - 宇軒</option>
+                            <option value="宇鋒">宇軒綠能股份有限公司 - 宇鋒</option>
+                            <option value="升股">兆明升股份有限公司 - 升股</option>
+                            <option value="鴻股">兆飛鴻有限公司 - 鴻股</option>
+                            <option value="兆明">兆明科技股份有限公司 - 兆明</option>
+                            <option value="寵星">寵星能源有限公司 - 寵星</option>
+                            <option value="水燈">水燈能源有限公司 - 水燈</option>
+                            <option value="寵田">寵田能源有限公司 - 寵田</option>
+                            <option value="晶天下">晶天下有限公司 - 晶天下</option>
+                            <option value="昊陽">昊陽電業股份有限公司 - 昊陽</option>
+                            <option value="浩陽電">浩陽儲工股份有限公司 - 浩陽電</option>
+                            <option value="浩陽電">浩陽電業股份有限公司 - 浩陽電</option>
+                            <option value="利高">利高光電股份有限公司 - 利高</option>
+                            <option value="雪笑">雪笑股份有限公司 - 雪笑</option>
+                            <option value="震君">震君投資股份有限公司 - 震君</option>
+                            <option value="利晃">利晃光電股份有限公司 - 利晃</option>
+                            <option value="昊田">昊田股份有限公司 - 昊田</option>
+                            <option value="介領">介領股份有限公司 - 介領</option>
+                            <option value="昊天">昊天有限公司 - 昊天</option>
+                            <option value="昊能">昊能有限公司 - 昊能</option>
+                            <option value="永恩">永恩電業股份有限公司 - 永恩</option>
+                            <option value="昊克">昊克股份有限公司 - 昊克</option>
+                            <option value="昊鴻">昊鴻股份有限公司 - 昊鴻</option>
+                            <option value="昊恩">昊恩股份有限公司 - 昊恩</option>
+                            <option value="昊頡">昊頡股份有限公司 - 昊頡</option>
+                            <option value="昊明電">昊明電業股份有限公司 - 昊明電</option>
+                            <option value="昊升電">昊升電業股份有限公司 - 昊升電</option>
+                            <option value="宇電">宇軒電業股份有限公司 - 宇電</option>
+                            <option value="昊瑞電">昊瑞電業股份有限公司 - 昊瑞電</option>
+                            <option value="昊瑞">昊瑞股份有限公司 - 昊瑞</option>
+                            <option value="昊儒">昊儒股份有限公司 - 昊儒</option>
+                            <option value="昊焜電">昊焜電業股份有限公司 - 昊焜電</option>
+                            <option value="昊升一">昊升一號電業股份有限公司 - 昊升一</option>
+                            <option value="昊升二">昊升二號電業股份有限公司 - 昊升二</option>
+                            <option value="昊升三">昊升三號電業股份有限公司 - 昊升三</option>
+                            <option value="昊軒一">昊軒一號電業股份有限公司 - 昊軒一</option>
+                            <option value="昊軒二">昊軒二號電業股份有限公司 - 昊軒二</option>
+                            <option value="昊軒三">昊軒三號電業股份有限公司 - 昊軒三</option>
+                            <option value="寵明電">寵明電業股份有限公司 - 寵明電</option>
+                            <option value="寵明綠">寵明綠能股份有限公司 - 寵明綠</option>
+                            <option value="寵明一">寵明一號電業股份有限公司 - 寵明一</option>
+                            <option value="寵明二">寵明二號電業股份有限公司 - 寵明二</option>
+                            <option value="寵明三">寵明三號電業股份有限公司 - 寵明三</option>
+                            <option value="昊儒電">昊儒電業股份有限公司 - 昊儒電</option>
+                            <option value="昊星電">昊星電業股份有限公司 - 昊星電</option>
+                            <option value="昊升">昊升有限公司 - 昊升</option>
+                            <option value="兆明電">兆明升電業股份有限公司 - 兆明電</option>
+                            <option value="兆明一電">兆明升一號電業股份有限公司 - 兆明一電</option>
+                            <option value="兆明二電">兆明升二號電業股份有限公司 - 兆明二電</option>
+                            <option value="昊勤">昊勤能源股份有限公司 - 昊勤</option>
+                            <option value="昊農">昊農股份有限公司 - 昊農</option>
+                            <option value="浩漁">浩陽養殖科技股份有限公司 - 浩漁</option>
+                            <option value="益異">益異卓力科技股份有限公司 - 益異</option>
+                            <option value="其他">其他（自行輸入）</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="customCompanyGroup" style="display: none;">
+                        <label>自訂公司代號 *</label>
+                        <input type="text" id="customCompanyCode" maxlength="10" placeholder="請輸入公司代號">
+                    </div>
+
+                    <div class="form-group">
+                        <label>部門代碼 *</label>
+                        <select id="genDeptCode" required>
+                            <option value="">請選擇部門</option>
+                            <option value="稽核">稽核室 - 稽核</option>
+                            <option value="總執">總經理室 - 總執</option>
+                            <option value="法務">法務室 - 法務</option>
+                            <option value="財處">財務處 - 財處</option>
+                            <option value="財務">財務部 - 財務</option>
+                            <option value="會計">會計部 - 會計</option>
+                            <option value="總管處">總管理處 - 總管處</option>
+                            <option value="人資">人資部 - 人資</option>
+                            <option value="管理">管理部 - 管理</option>
+                            <option value="資訊">資訊部 - 資訊</option>
+                            <option value="質管">品質管理部 - 質管</option>
+                            <option value="採處">採購處 - 採處</option>
+                            <option value="採購">採購部 - 採購</option>
+                            <option value="倉管">倉管部 - 倉管</option>
+                            <option value="工管處">工程管理處 - 工管處</option>
+                            <option value="工程">工程部 - 工程</option>
+                            <option value="維運">維運部 - 維運</option>
+                            <option value="設規處">設計規劃處 - 設規處</option>
+                            <option value="設規">設計規劃部 - 設規</option>
+                            <option value="開發處">事業開發暨專案管理處 - 開發處</option>
+                            <option value="業務">業務部 - 業務</option>
+                            <option value="新事業">新產品事業部 - 新事業</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>發文日期 *</label>
+                        <input type="date" id="genDocDate" required>
+                    </div>
+
+                    <div id="docNumberPreview" class="doc-number-display doc-number-placeholder">
+                        請選擇公司和部門
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" onclick="generateAndSave()">生成並暫存</button>
+                        <button type="button" class="btn btn-success" onclick="generateAndComplete()">生成並完成</button>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>💡 使用說明</strong><br>
+                        • <strong>生成並暫存</strong>：先取得編號，稍後再補完整資料<br>
+                        • <strong>生成並完成</strong>：立即填寫完整資料並儲存<br>
+                        • <strong>編號格式</strong>：公司代號 + 部門代碼 + 第 + 民國年月日 + 流水號<br>
+                        • <strong>範例</strong>：宇軒總執第1141229001
+                    </div>
+                </form>
+            </div>
+
+            <!-- 右側：完成發文資料 -->
+            <div class="card">
+                <h2>📝 完成發文資料</h2>
+                
+                <form id="completeForm">
+                    <div class="form-group">
+                        <label>發文字號 *</label>
+                        <input type="text" id="completeDocNumber" readonly style="background: var(--bg-input); font-family: 'Orbitron', monospace; font-weight: 600; color: var(--neon-blue);">
+                    </div>
+
+                    <div class="form-group">
+                        <label>發文日期 *</label>
+                        <input type="date" id="completeDocDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>主旨 *</label>
+                        <textarea id="completeSubject" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>受文單位 *</label>
+                        <input type="text" id="completeRecipient" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>發文單位 *</label>
+                        <input type="text" id="completeSender" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>附件檔案</label>
+                        <div class="file-upload-area" id="fileUploadArea" onclick="document.getElementById('fileInput').click()">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📎</div>
+                            <div style="color: var(--text-primary); font-weight: 500;">點擊或拖曳檔案到此處上傳</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                                支援所有檔案格式，單檔最大 10MB
+                            </div>
+                        </div>
+                        <input type="file" id="fileInput" multiple style="display: none;">
+                        <div class="file-list" id="fileList"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">儲存發文資料</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 發文記錄列表 -->
+        <div class="card">
+            <h2>📊 發文記錄</h2>
+            
+            <div class="search-section">
+                <div class="form-group" style="margin: 0;">
+                    <label>搜尋條件</label>
+                    <input type="text" id="searchInput" placeholder="輸入發文字號或主旨...">
+                </div>
+                <div class="form-group" style="margin: 0;">
+                    <label>公司別篩選</label>
+                    <select id="filterCompany">
+                        <option value="">全部公司</option>
+                        <option value="宇軒">宇軒能源科技股份有限公司</option>
+                        <option value="宇鋒">宇軒綠能股份有限公司</option>
+                        <option value="升股">兆明升股份有限公司</option>
+                        <option value="鴻股">兆飛鴻有限公司</option>
+                        <option value="兆明">兆明科技股份有限公司</option>
+                        <option value="寵星">寵星能源有限公司</option>
+                        <option value="水燈">水燈能源有限公司</option>
+                        <option value="寵田">寵田能源有限公司</option>
+                        <option value="晶天下">晶天下有限公司</option>
+                        <option value="昊陽">昊陽電業股份有限公司</option>
+                        <option value="浩陽電">浩陽儲工股份有限公司</option>
+                        <option value="利高">利高光電股份有限公司</option>
+                        <option value="雪笑">雪笑股份有限公司</option>
+                        <option value="震君">震君投資股份有限公司</option>
+                        <option value="利晃">利晃光電股份有限公司</option>
+                        <option value="昊田">昊田股份有限公司</option>
+                        <option value="介領">介領股份有限公司</option>
+                        <option value="昊天">昊天有限公司</option>
+                        <option value="昊能">昊能有限公司</option>
+                        <option value="永恩">永恩電業股份有限公司</option>
+                        <option value="昊克">昊克股份有限公司</option>
+                        <option value="昊鴻">昊鴻股份有限公司</option>
+                        <option value="昊恩">昊恩股份有限公司</option>
+                        <option value="昊頡">昊頡股份有限公司</option>
+                        <option value="昊明電">昊明電業股份有限公司</option>
+                        <option value="昊升電">昊升電業股份有限公司</option>
+                        <option value="宇電">宇軒電業股份有限公司</option>
+                        <option value="昊瑞電">昊瑞電業股份有限公司</option>
+                        <option value="昊瑞">昊瑞股份有限公司</option>
+                        <option value="昊儒">昊儒股份有限公司</option>
+                        <option value="昊焜電">昊焜電業股份有限公司</option>
+                        <option value="昊升一">昊升一號電業股份有限公司</option>
+                        <option value="昊升二">昊升二號電業股份有限公司</option>
+                        <option value="昊升三">昊升三號電業股份有限公司</option>
+                        <option value="昊軒一">昊軒一號電業股份有限公司</option>
+                        <option value="昊軒二">昊軒二號電業股份有限公司</option>
+                        <option value="昊軒三">昊軒三號電業股份有限公司</option>
+                        <option value="寵明電">寵明電業股份有限公司</option>
+                        <option value="寵明綠">寵明綠能股份有限公司</option>
+                        <option value="寵明一">寵明一號電業股份有限公司</option>
+                        <option value="寵明二">寵明二號電業股份有限公司</option>
+                        <option value="寵明三">寵明三號電業股份有限公司</option>
+                        <option value="昊儒電">昊儒電業股份有限公司</option>
+                        <option value="昊星電">昊星電業股份有限公司</option>
+                        <option value="昊升">昊升有限公司</option>
+                        <option value="兆明電">兆明升電業股份有限公司</option>
+                        <option value="兆明一電">兆明升一號電業股份有限公司</option>
+                        <option value="兆明二電">兆明升二號電業股份有限公司</option>
+                        <option value="昊勤">昊勤能源股份有限公司</option>
+                        <option value="昊農">昊農股份有限公司</option>
+                        <option value="浩漁">浩陽養殖科技股份有限公司</option>
+                        <option value="益異">益異卓力科技股份有限公司</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin: 0;">
+                    <label>狀態篩選</label>
+                    <select id="filterStatus">
+                        <option value="">全部狀態</option>
+                        <option value="pending">待補資料</option>
+                        <option value="completed">已完成</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: end;">
+                    <button class="btn btn-secondary" onclick="searchDocuments()" style="width: 100%;">搜尋</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>發文字號</th>
+                            <th>狀態</th>
+                            <th>日期</th>
+                            <th>主旨</th>
+                            <th>受文單位</th>
+                            <th>發文單位</th>
+                            <th>附件</th>
+                            <th style="text-align: center;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="docTableBody">
+                        <tr>
+                            <td colspan="8" style="text-align: center; color: var(--text-secondary);">
+                                尚無發文記錄
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="export-section">
+                <div class="form-group" style="margin: 0;">
+                    <label>匯出年度</label>
+                    <select id="exportYear"></select>
+                </div>
+                <div class="form-group" style="margin: 0;">
+                    <label>公司別</label>
+                    <select id="exportCompany">
+                        <option value="all">全部公司</option>
+                        <option value="宇軒">宇軒能源科技股份有限公司</option>
+                        <option value="宇鋒">宇軒綠能股份有限公司</option>
+                        <option value="升股">兆明升股份有限公司</option>
+                        <option value="鴻股">兆飛鴻有限公司</option>
+                        <option value="兆明">兆明科技股份有限公司</option>
+                        <option value="寵星">寵星能源有限公司</option>
+                        <option value="水燈">水燈能源有限公司</option>
+                        <option value="寵田">寵田能源有限公司</option>
+                        <option value="晶天下">晶天下有限公司</option>
+                        <option value="昊陽">昊陽電業股份有限公司</option>
+                        <option value="浩陽電">浩陽儲工股份有限公司</option>
+                        <option value="利高">利高光電股份有限公司</option>
+                        <option value="雪笑">雪笑股份有限公司</option>
+                        <option value="震君">震君投資股份有限公司</option>
+                        <option value="利晃">利晃光電股份有限公司</option>
+                        <option value="昊田">昊田股份有限公司</option>
+                        <option value="介領">介領股份有限公司</option>
+                        <option value="昊天">昊天有限公司</option>
+                        <option value="昊能">昊能有限公司</option>
+                        <option value="永恩">永恩電業股份有限公司</option>
+                        <option value="昊克">昊克股份有限公司</option>
+                        <option value="昊鴻">昊鴻股份有限公司</option>
+                        <option value="昊恩">昊恩股份有限公司</option>
+                        <option value="昊頡">昊頡股份有限公司</option>
+                        <option value="昊明電">昊明電業股份有限公司</option>
+                        <option value="昊升電">昊升電業股份有限公司</option>
+                        <option value="宇電">宇軒電業股份有限公司</option>
+                        <option value="昊瑞電">昊瑞電業股份有限公司</option>
+                        <option value="昊瑞">昊瑞股份有限公司</option>
+                        <option value="昊儒">昊儒股份有限公司</option>
+                        <option value="昊焜電">昊焜電業股份有限公司</option>
+                        <option value="昊升一">昊升一號電業股份有限公司</option>
+                        <option value="昊升二">昊升二號電業股份有限公司</option>
+                        <option value="昊升三">昊升三號電業股份有限公司</option>
+                        <option value="昊軒一">昊軒一號電業股份有限公司</option>
+                        <option value="昊軒二">昊軒二號電業股份有限公司</option>
+                        <option value="昊軒三">昊軒三號電業股份有限公司</option>
+                        <option value="寵明電">寵明電業股份有限公司</option>
+                        <option value="寵明綠">寵明綠能股份有限公司</option>
+                        <option value="寵明一">寵明一號電業股份有限公司</option>
+                        <option value="寵明二">寵明二號電業股份有限公司</option>
+                        <option value="寵明三">寵明三號電業股份有限公司</option>
+                        <option value="昊儒電">昊儒電業股份有限公司</option>
+                        <option value="昊星電">昊星電業股份有限公司</option>
+                        <option value="昊升">昊升有限公司</option>
+                        <option value="兆明電">兆明升電業股份有限公司</option>
+                        <option value="兆明一電">兆明升一號電業股份有限公司</option>
+                        <option value="兆明二電">兆明升二號電業股份有限公司</option>
+                        <option value="昊勤">昊勤能源股份有限公司</option>
+                        <option value="昊農">昊農股份有限公司</option>
+                        <option value="浩漁">浩陽養殖科技股份有限公司</option>
+                        <option value="益異">益異卓力科技股份有限公司</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: end;">
+                    <button class="btn btn-success" onclick="exportReport()" style="width: 100%;">📥 匯出報表</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看詳情模態框 -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: var(--neon-blue); margin-bottom: 1.5rem; font-family: 'Orbitron', sans-serif;">發文詳情</h2>
+            <div id="viewDetails"></div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeViewModal()" style="width: 100%;">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 編輯模態框 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: var(--neon-purple); margin-bottom: 1.5rem; font-family: 'Orbitron', sans-serif;">編輯發文資料</h2>
+            <form id="editForm">
+                <input type="hidden" id="editDocId">
+                
+                <div class="form-group">
+                    <label>發文字號</label>
+                    <input type="text" id="editDocNumber" readonly style="background: var(--bg-input); font-family: 'Orbitron', monospace; font-weight: 600;">
+                </div>
+
+                <div class="form-group">
+                    <label>發文日期 *</label>
+                    <input type="date" id="editDocDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label>主旨 *</label>
+                    <textarea id="editSubject" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>受文單位 *</label>
+                    <input type="text" id="editRecipient" required>
+                </div>
+
+                <div class="form-group">
+                    <label>發文單位 *</label>
+                    <input type="text" id="editSender" required>
+                </div>
+
+                <div class="form-group">
+                    <label>附件檔案</label>
+                    <div class="file-upload-area" onclick="document.getElementById('editFileInput').click()">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📎</div>
+                        <div style="color: var(--text-primary);">點擊或拖曳檔案到此處上傳</div>
+                    </div>
+                    <input type="file" id="editFileInput" multiple style="display: none;">
+                    <div class="file-list" id="editFileList"></div>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">儲存變更</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 刪除確認模態框 -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: #ff4d6d; font-family: 'Orbitron', sans-serif;">確認刪除</h2>
+            <p style="margin: 1.5rem 0; color: var(--text-secondary);">確定要刪除此發文記錄嗎？此操作無法復原。</p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">取消</button>
+                <button class="btn btn-danger" onclick="confirmDelete()">確認刪除</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let documents = [];
+        let deleteId = null;
+        let currentFiles = [];
+        let editFiles = [];
+
+        // 從 localStorage 載入資料
+        function loadDocuments() {
+            const saved = localStorage.getItem('documents');
+            if (saved) {
+                documents = JSON.parse(saved);
+                renderTable();
+                updateStats();
+            }
+        }
+
+        // 儲存到 localStorage
+        function saveDocuments() {
+            localStorage.setItem('documents', JSON.stringify(documents));
+        }
+
+        // 設定今天的日期為預設值
+        document.getElementById('genDocDate').valueAsDate = new Date();
+        document.getElementById('completeDocDate').valueAsDate = new Date();
+
+        // 監聽編號生成器的變更
+        document.getElementById('genCompanyCode').addEventListener('change', function() {
+            const customGroup = document.getElementById('customCompanyGroup');
+            if (this.value === '其他') {
+                customGroup.style.display = 'block';
+                document.getElementById('customCompanyCode').required = true;
+            } else {
+                customGroup.style.display = 'none';
+                document.getElementById('customCompanyCode').required = false;
+                document.getElementById('customCompanyCode').value = '';
+            }
+            updatePreview();
+        });
+        document.getElementById('genDeptCode').addEventListener('change', updatePreview);
+        document.getElementById('genDocDate').addEventListener('change', updatePreview);
+        document.getElementById('customCompanyCode').addEventListener('input', updatePreview);
+
+        function updatePreview() {
+            let companyCode = document.getElementById('genCompanyCode').value;
+            
+            // 如果選擇「其他」，使用自訂的公司代號
+            if (companyCode === '其他') {
+                companyCode = document.getElementById('customCompanyCode').value;
+            }
+            
+            const deptCode = document.getElementById('genDeptCode').value;
+            const docDate = document.getElementById('genDocDate').value;
+
+            const preview = document.getElementById('docNumberPreview');
+
+            if (companyCode && deptCode && docDate) {
+                const previewNumber = generateDocNumber(companyCode, deptCode, docDate, true);
+                preview.textContent = previewNumber;
+                preview.classList.remove('doc-number-placeholder');
+            } else {
+                preview.textContent = '請選擇公司和部門';
+                preview.classList.add('doc-number-placeholder');
+            }
+        }
+
+        // 獲取下一個流水號
+        function getNextSerialNumber(companyCode, deptCode, docDate) {
+            const date = new Date(docDate);
+            const rocYear = (date.getFullYear() - 1911).toString();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+
+            const prefix = `${companyCode}${deptCode}第${rocYear}${month}${day}`;
+            
+            const sameDayDocs = documents.filter(doc => 
+                doc.docNumber.startsWith(prefix)
+            );
+
+            const nextNum = sameDayDocs.length + 1;
+            return String(nextNum).padStart(3, '0');
+        }
+
+        // 生成發文字號
+        function generateDocNumber(companyCode, deptCode, date, preview = false) {
+            const docDate = new Date(date);
+            const rocYear = (docDate.getFullYear() - 1911).toString();
+            const month = String(docDate.getMonth() + 1).padStart(2, '0');
+            const day = String(docDate.getDate()).padStart(2, '0');
+            const serial = preview ? '001' : getNextSerialNumber(companyCode, deptCode, date);
+
+            return `${companyCode}${deptCode}第${rocYear}${month}${day}${serial}`;
+        }
+
+        // 生成並暫存
+        function generateAndSave() {
+            let companyCode = document.getElementById('genCompanyCode').value;
+            
+            // 如果選擇「其他」，使用自訂的公司代號
+            if (companyCode === '其他') {
+                companyCode = document.getElementById('customCompanyCode').value;
+                if (!companyCode) {
+                    alert('請輸入自訂公司代號');
+                    return;
+                }
+            }
+            
+            const deptCode = document.getElementById('genDeptCode').value;
+            const docDate = document.getElementById('genDocDate').value;
+
+            if (!companyCode || !deptCode || !docDate) {
+                alert('請填寫所有必填欄位');
+                return;
+            }
+
+            const docNumber = generateDocNumber(companyCode, deptCode, docDate);
+
+            const newDoc = {
+                id: Date.now(),
+                docNumber,
+                companyCode,
+                deptCode,
+                date: docDate,
+                status: 'pending',
+                subject: '',
+                recipient: '',
+                sender: '',
+                files: [],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            documents.unshift(newDoc);
+            saveDocuments();
+            renderTable();
+            updateStats();
+
+            // 重置生成器表單
+            document.getElementById('generatorForm').reset();
+            document.getElementById('genDocDate').valueAsDate = new Date();
+            document.getElementById('docNumberPreview').textContent = '請選擇公司和部門';
+            document.getElementById('docNumberPreview').classList.add('doc-number-placeholder');
+            document.getElementById('customCompanyGroup').style.display = 'none';
+
+            alert('發文編號已生成並暫存！\n\n' + docNumber + '\n\n請稍後在「發文記錄」中點擊「補完資料」按鈕完成發文。');
+        }
+
+        // 生成並直接完成
+        function generateAndComplete() {
+            let companyCode = document.getElementById('genCompanyCode').value;
+            
+            // 如果選擇「其他」，使用自訂的公司代號
+            if (companyCode === '其他') {
+                companyCode = document.getElementById('customCompanyCode').value;
+                if (!companyCode) {
+                    alert('請輸入自訂公司代號');
+                    return;
+                }
+            }
+            
+            const deptCode = document.getElementById('genDeptCode').value;
+            const docDate = document.getElementById('genDocDate').value;
+
+            if (!companyCode || !deptCode || !docDate) {
+                alert('請填寫所有必填欄位');
+                return;
+            }
+
+            const docNumber = generateDocNumber(companyCode, deptCode, docDate);
+
+            // 填入完成表單
+            document.getElementById('completeDocNumber').value = docNumber;
+            document.getElementById('completeDocDate').value = docDate;
+            
+            // 暫存當前生成的資訊
+            document.getElementById('completeForm').dataset.companyCode = companyCode;
+            document.getElementById('completeForm').dataset.deptCode = deptCode;
+
+            // 滾動到完成表單
+            document.getElementById('completeForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // 聚焦到主旨欄位
+            setTimeout(() => {
+                document.getElementById('completeSubject').focus();
+            }, 500);
+        }
+
+        // 完成表單提交
+        document.getElementById('completeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const docNumber = document.getElementById('completeDocNumber').value;
+            if (!docNumber) {
+                alert('請先生成發文編號');
+                return;
+            }
+
+            const companyCode = this.dataset.companyCode;
+            const deptCode = this.dataset.deptCode;
+            const docDate = document.getElementById('completeDocDate').value;
+            const subject = document.getElementById('completeSubject').value;
+            const recipient = document.getElementById('completeRecipient').value;
+            const sender = document.getElementById('completeSender').value;
+
+            const newDoc = {
+                id: Date.now(),
+                docNumber,
+                companyCode,
+                deptCode,
+                date: docDate,
+                status: 'completed',
+                subject,
+                recipient,
+                sender,
+                files: currentFiles.map(f => ({
+                    name: f.name,
+                    size: f.size,
+                    data: f.data
+                })),
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            documents.unshift(newDoc);
+            saveDocuments();
+            renderTable();
+            updateStats();
+
+            // 重置兩個表單
+            document.getElementById('generatorForm').reset();
+            this.reset();
+            document.getElementById('genDocDate').valueAsDate = new Date();
+            document.getElementById('completeDocDate').valueAsDate = new Date();
+            document.getElementById('docNumberPreview').textContent = '請選擇公司和部門';
+            document.getElementById('docNumberPreview').classList.add('doc-number-placeholder');
+            currentFiles = [];
+            renderFileList();
+
+            alert('發文資料已完成儲存！\n發文字號：' + docNumber);
+        });
+
+        // 檔案上傳處理
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        fileUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.add('dragover');
+        });
+
+        fileUploadArea.addEventListener('dragleave', () => {
+            fileUploadArea.classList.remove('dragover');
+        });
+
+        fileUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`檔案 ${file.name} 超過 10MB 限制`);
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    currentFiles.push({
+                        name: file.name,
+                        size: file.size,
+                        data: e.target.result
+                    });
+                    renderFileList();
+                };
+                reader.readAsDataURL(file);
+            });
+            fileInput.value = '';
+        }
+
+        function renderFileList() {
+            const container = document.getElementById('fileList');
+            if (currentFiles.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = currentFiles.map((file, index) => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">📄</span>
+                        <div>
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${formatFileSize(file.size)}</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-small" onclick="removeFile(${index})">刪除</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFile(index) {
+            currentFiles.splice(index, 1);
+            renderFileList();
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        // 編輯模態框的檔案處理
+        const editFileInput = document.getElementById('editFileInput');
+        editFileInput.addEventListener('change', (e) => {
+            handleEditFiles(e.target.files);
+        });
+
+        function handleEditFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`檔案 ${file.name} 超過 10MB 限制`);
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    editFiles.push({
+                        name: file.name,
+                        size: file.size,
+                        data: e.target.result
+                    });
+                    renderEditFileList();
+                };
+                reader.readAsDataURL(file);
+            });
+            editFileInput.value = '';
+        }
+
+        function renderEditFileList() {
+            const container = document.getElementById('editFileList');
+            if (editFiles.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = editFiles.map((file, index) => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">📄</span>
+                        <div>
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${formatFileSize(file.size)}</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-small" onclick="removeEditFile(${index})">刪除</button>
+                </div>
+            `).join('');
+        }
+
+        function removeEditFile(index) {
+            editFiles.splice(index, 1);
+            renderEditFileList();
+        }
+
+        // 渲染表格
+        function renderTable(filteredDocs = null) {
+            const tbody = document.getElementById('docTableBody');
+            const docsToRender = filteredDocs || documents;
+
+            if (docsToRender.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; color: var(--text-secondary);">
+                            ${filteredDocs ? '查無資料' : '尚無發文記錄'}
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = docsToRender.map(doc => {
+                const statusBadge = doc.status === 'pending' 
+                    ? '<span class="status-badge status-pending">待補資料</span>'
+                    : '<span class="status-badge status-completed">已完成</span>';
+                
+                const subject = doc.subject || '-';
+                const recipient = doc.recipient || '-';
+                const sender = doc.sender || '-';
+                const fileCount = doc.files ? doc.files.length : 0;
+
+                return `
+                    <tr>
+                        <td class="doc-number">${doc.docNumber}</td>
+                        <td>${statusBadge}</td>
+                        <td>${doc.date}</td>
+                        <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${subject}</td>
+                        <td>${recipient}</td>
+                        <td>${sender}</td>
+                        <td>${fileCount > 0 ? `📎 ${fileCount}` : '-'}</td>
+                        <td class="actions" style="text-align: center;">
+                            ${doc.status === 'pending' 
+                                ? `<button class="btn btn-warning btn-small" onclick="editDocument(${doc.id})">補完資料</button>`
+                                : `<button class="btn btn-secondary btn-small" onclick="viewDocument(${doc.id})">查看</button>
+                                   <button class="btn btn-success btn-small" onclick="editDocument(${doc.id})">編輯</button>`
+                            }
+                            <button class="btn btn-danger btn-small" onclick="openDeleteModal(${doc.id})">刪除</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 搜尋功能
+        function searchDocuments() {
+            const searchTerm = document.getElementById('searchInput').value.toUpperCase();
+            const companyFilter = document.getElementById('filterCompany').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+
+            let filtered = documents;
+
+            if (searchTerm) {
+                filtered = filtered.filter(doc => 
+                    doc.docNumber.includes(searchTerm) || 
+                    (doc.subject && doc.subject.includes(searchTerm))
+                );
+            }
+
+            if (companyFilter) {
+                filtered = filtered.filter(doc => doc.companyCode === companyFilter);
+            }
+
+            if (statusFilter) {
+                filtered = filtered.filter(doc => doc.status === statusFilter);
+            }
+
+            renderTable(filtered);
+        }
+
+        // 查看文件詳情
+        function viewDocument(id) {
+            const doc = documents.find(d => d.id === id);
+            if (!doc) return;
+
+            const filesHtml = doc.files && doc.files.length > 0
+                ? doc.files.map(file => `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <span class="file-icon">📄</span>
+                            <div>
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-size">${formatFileSize(file.size)}</div>
+                            </div>
+                        </div>
+                        <a href="${file.data}" download="${file.name}" class="btn btn-success btn-small">下載</a>
+                    </div>
+                `).join('')
+                : '<p style="color: var(--text-secondary); text-align: center;">無附件</p>';
+
+            const details = `
+                <div class="detail-row">
+                    <div class="detail-label">發文字號</div>
+                    <div class="detail-value" style="font-family: 'Orbitron', monospace; font-weight: 600; color: var(--neon-blue);">${doc.docNumber}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">狀態</div>
+                    <div class="detail-value">${doc.status === 'pending' ? '待補資料' : '已完成'}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">發文日期</div>
+                    <div class="detail-value">${doc.date}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">主旨</div>
+                    <div class="detail-value">${doc.subject || '-'}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">受文單位</div>
+                    <div class="detail-value">${doc.recipient || '-'}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">發文單位</div>
+                    <div class="detail-value">${doc.sender || '-'}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">建立時間</div>
+                    <div class="detail-value">${new Date(doc.createdAt).toLocaleString('zh-TW')}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">附件檔案</div>
+                    <div class="detail-value">
+                        ${filesHtml}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('viewDetails').innerHTML = details;
+            document.getElementById('viewModal').style.display = 'block';
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        // 編輯文件
+        function editDocument(id) {
+            const doc = documents.find(d => d.id === id);
+            if (!doc) return;
+
+            document.getElementById('editDocId').value = doc.id;
+            document.getElementById('editDocNumber').value = doc.docNumber;
+            document.getElementById('editDocDate').value = doc.date;
+            document.getElementById('editSubject').value = doc.subject || '';
+            document.getElementById('editRecipient').value = doc.recipient || '';
+            document.getElementById('editSender').value = doc.sender || '';
+
+            editFiles = doc.files ? [...doc.files] : [];
+            renderEditFileList();
+
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            editFiles = [];
+        }
+
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const id = parseInt(document.getElementById('editDocId').value);
+            const doc = documents.find(d => d.id === id);
+            if (!doc) return;
+
+            doc.date = document.getElementById('editDocDate').value;
+            doc.subject = document.getElementById('editSubject').value;
+            doc.recipient = document.getElementById('editRecipient').value;
+            doc.sender = document.getElementById('editSender').value;
+            doc.files = editFiles;
+            doc.status = 'completed';
+            doc.updatedAt = new Date().toISOString();
+
+            saveDocuments();
+            renderTable();
+            updateStats();
+            closeEditModal();
+
+            alert('發文資料已更新！');
+        });
+
+        // 更新統計
+        function updateStats() {
+            const today = new Date().toISOString().split('T')[0];
+
+            document.getElementById('totalDocs').textContent = documents.length;
+            
+            const pendingDocs = documents.filter(doc => doc.status === 'pending');
+            document.getElementById('pendingDocs').textContent = pendingDocs.length;
+
+            const completedDocs = documents.filter(doc => doc.status === 'completed');
+            document.getElementById('completedDocs').textContent = completedDocs.length;
+
+            const todayDocs = documents.filter(doc => doc.date === today);
+            document.getElementById('todayDocs').textContent = todayDocs.length;
+        }
+
+        // 刪除相關功能
+        function openDeleteModal(id) {
+            deleteId = id;
+            document.getElementById('deleteModal').style.display = 'block';
+        }
+
+        function closeDeleteModal() {
+            deleteId = null;
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        function confirmDelete() {
+            if (deleteId) {
+                documents = documents.filter(doc => doc.id !== deleteId);
+                saveDocuments();
+                renderTable();
+                updateStats();
+                closeDeleteModal();
+            }
+        }
+
+        // 匯出報表
+        function exportReport() {
+            const year = parseInt(document.getElementById('exportYear').value);
+            const company = document.getElementById('exportCompany').value;
+
+            let filtered = documents.filter(doc => {
+                const docDate = new Date(doc.date);
+                return docDate.getFullYear() === year && doc.status === 'completed';
+            });
+
+            if (company !== 'all') {
+                filtered = filtered.filter(doc => doc.companyCode === company);
+            }
+
+            if (filtered.length === 0) {
+                alert('查無符合條件的已完成發文記錄');
+                return;
+            }
+
+            const rocYear = year - 1911;
+            const companyName = company === 'all' ? '全部公司' : `公司${company}`;
+            const header = '發文字號,日期,主旨,受文單位,發文單位,附件數量\n';
+            const rows = filtered.map(doc => 
+                `"${doc.docNumber}","${doc.date}","${doc.subject}","${doc.recipient}","${doc.sender}","${doc.files ? doc.files.length : 0}"`
+            ).join('\n');
+
+            const csv = '\uFEFF' + header + rows;
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `發文報表_${rocYear}年_${companyName}_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        // 頁面載入時初始化
+        window.addEventListener('load', function() {
+            loadDocuments();
+            
+            // 設定年份選項
+            const currentYear = new Date().getFullYear();
+            const exportYear = document.getElementById('exportYear');
+            exportYear.innerHTML = '';
+            for (let i = currentYear - 2; i <= currentYear + 2; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i} (民國${i - 1911}年)`;
+                if (i === currentYear) option.selected = true;
+                exportYear.appendChild(option);
+            }
+        });
+
+        // 點擊模態框外部關閉
+        window.onclick = function(event) {
+            const deleteModal = document.getElementById('deleteModal');
+            const viewModal = document.getElementById('viewModal');
+            const editModal = document.getElementById('editModal');
+            
+            if (event.target === deleteModal) closeDeleteModal();
+            if (event.target === viewModal) closeViewModal();
+            if (event.target === editModal) closeEditModal();
+        }
+    </script>
+</body>
+</html>
