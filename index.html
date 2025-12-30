@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html class="dark" lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GOLDEN DMS - 發文管理系統</title>
+    <title>IMPERIAL DMS - 發文管理系統</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
     <script>
         tailwind.config = {
@@ -13,33 +13,38 @@
             theme: {
                 extend: {
                     colors: {
-                        "glam-dark": "#050505",
-                        "glam-card": "#121212",
-                        "glam-gold": {
-                            100: "#FBF5D4",
-                            200: "#F3E5AB",
-                            300: "#E3C580",
-                            400: "#D4AF37",
-                            500: "#B4941F",
-                            600: "#8A6E28",
-                            900: "#3E2F0A",
+                        navy: {
+                            950: "#000814",
+                            900: "#051125",
+                            800: "#0B1D3F",
+                            700: "#152C5B",
+                            600: "#1E3A8A",
                         },
+                        gold: {
+                            base: "#D4AF37",
+                            light: "#F9E4B7",
+                            shine: "#FFD700",
+                            dark: "#8C6A12",
+                            bronze: "#AA771C",
+                        }
                     },
                     fontFamily: {
-                        sans: ["'Noto Sans TC'", "sans-serif"],
-                        serif: ["'Playfair Display'", "serif"],
-                        display: ["'Cinzel'", "serif"],
+                        sans: ["Noto Sans TC", "sans-serif"],
+                        serif: ["Playfair Display", "serif"],
                     },
                     backgroundImage: {
-                        'luxury-gradient': 'radial-gradient(circle at 50% 0%, #2a2a2a 0%, #050505 100%)',
-                        'gold-shimmer': 'linear-gradient(45deg, rgba(212, 175, 55, 0) 40%, rgba(212, 175, 55, 0.2) 50%, rgba(212, 175, 55, 0) 60%)',
-                        'gold-plate': 'linear-gradient(180deg, #F3E5AB 0%, #D4AF37 40%, #B4941F 100%)',
-                        'dark-plate': 'linear-gradient(180deg, #2D2D2D 0%, #121212 100%)',
+                        'royal-navy': 'radial-gradient(circle at 50% -10%, #152C5B 0%, #051125 50%, #000814 100%)',
+                        'gold-metal': 'linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%)',
+                        'gold-text': 'linear-gradient(to bottom, #F9E4B7, #D4AF37, #B38728)',
+                        'gloss-overlay': 'linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0) 100%)',
+                        'card-gradient': 'linear-gradient(145deg, rgba(11,29,63,0.7) 0%, rgba(5,17,37,0.8) 100%)',
                     },
                     boxShadow: {
-                        'gold-glow': '0 0 20px rgba(212, 175, 55, 0.15)',
-                        'card-emboss': 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 20px rgba(0,0,0,0.5)',
-                        'inner-glow': 'inset 0 0 20px rgba(212, 175, 55, 0.05)',
+                        'glow-gold': '0 0 20px rgba(212, 175, 55, 0.25)',
+                        'glow-blue': '0 0 30px rgba(21, 44, 91, 0.3)',
+                        'inner-light': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                        'gold-border': '0 0 0 1px rgba(212, 175, 55, 0.3), 0 4px 20px rgba(0,0,0,0.5)',
+                        'card-depth': '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
                     },
                     animation: {
                         'shimmer': 'shimmer 3s infinite linear',
@@ -47,8 +52,8 @@
                     },
                     keyframes: {
                         shimmer: {
-                            '0%': { transform: 'translateX(-100%)' },
-                            '100%': { transform: 'translateX(100%)' }
+                            '0%': { backgroundPosition: '-200% center' },
+                            '100%': { backgroundPosition: '200% center' },
                         },
                         fadeIn: {
                             '0%': { opacity: '0', transform: 'translateY(10px)' },
@@ -60,239 +65,242 @@
         };
     </script>
     <style>
-        ::-webkit-scrollbar { width: 0px; background: transparent; }
         body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #000814;
             -webkit-tap-highlight-color: transparent;
-            background-color: #050505;
             min-height: max(884px, 100dvh);
         }
         .text-gold-gradient {
-            background: linear-gradient(to bottom, #F3E5AB, #D4AF37);
+            background: linear-gradient(180deg, #FDFBF7 0%, #D4AF37 45%, #AA771C 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-        .border-gold-gradient {
-            border-image: linear-gradient(to bottom, #D4AF37, #8A6E28) 1;
+        .glass-navy {
+            background: rgba(11, 29, 63, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
-        .glass-panel {
-            background: rgba(18, 18, 18, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        .gold-trim {
+            position: relative;
         }
-        .pb-safe {
-            padding-bottom: env(safe-area-inset-bottom, 20px);
+        .gold-trim::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(212,175,55,0.8), rgba(252,246,186,0.5), rgba(179,135,40,0.8));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #152C5B, #D4AF37); border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: #000814; }
         .modal-overlay {
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(10px);
         }
     </style>
 </head>
-<body class="bg-glam-dark bg-luxury-gradient text-gray-200 font-sans min-h-screen flex flex-col antialiased selection:bg-glam-gold-400 selection:text-black">
-    
-    <!-- 背景裝飾 -->
-    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-glam-gold-400/5 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-900/10 rounded-full blur-[120px]"></div>
-        <div class="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-glam-gold-400/5 rounded-full blur-[80px]"></div>
-    </div>
+<body class="text-slate-200 min-h-screen flex flex-col antialiased bg-royal-navy bg-fixed selection:bg-gold-base/30 selection:text-white">
 
     <!-- Header -->
-    <header class="pt-14 pb-6 px-5 sticky top-0 z-30 glass-panel border-b border-white/5 transition-all duration-300">
-        <div class="flex items-center justify-between mb-4">
+    <header class="sticky top-0 z-30 pt-safe px-6 pb-4 bg-navy-950/80 backdrop-blur-xl border-b border-gold-base/20 shadow-lg shadow-black/20">
+        <div class="flex items-center justify-between mt-4">
             <div class="flex items-center gap-4">
-                <div class="relative group">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-glam-gold-300 to-glam-gold-600 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-1000"></div>
-                    <div class="relative w-12 h-12 rounded-full bg-gradient-to-b from-[#333] to-[#111] border border-glam-gold-500/30 flex items-center justify-center shadow-lg">
-                        <span class="material-icons-round text-glam-gold-200 text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">article</span>
-                    </div>
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 relative flex items-center justify-center shadow-lg shadow-black/50 group overflow-hidden border border-gold-base/30">
+                    <div class="absolute inset-0 bg-gold-metal opacity-20 mix-blend-overlay"></div>
+                    <div class="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shimmer" style="background-size: 200% 100%;"></div>
+                    <span class="material-icons-round text-gold-light text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">description</span>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold tracking-wide font-display text-gold-gradient drop-shadow-sm">GOLDEN DMS</h1>
+                    <h1 class="text-lg font-serif font-bold tracking-wide text-white drop-shadow-md">發文管理系統</h1>
                     <div class="flex items-center gap-2">
-                        <span class="h-[1px] w-4 bg-glam-gold-500/50"></span>
-                        <p class="text-[10px] text-glam-gold-300/70 uppercase tracking-[0.25em] font-serif">發文管理系統</p>
+                        <span class="h-[1px] w-4 bg-gold-metal"></span>
+                        <p class="text-[10px] text-gold-base tracking-[0.2em] uppercase font-serif font-semibold">Imperial Blue</p>
                     </div>
                 </div>
             </div>
-            <button onclick="showStats()" class="relative w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group overflow-hidden">
-                <div class="absolute inset-0 bg-glam-gold-400/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                <span class="material-icons-round text-glam-gold-200 group-hover:text-white transition-colors">bar_chart</span>
+            <button onclick="showStats()" class="w-10 h-10 flex items-center justify-center rounded-full bg-navy-800/50 border border-gold-base/30 hover:bg-gold-base/20 hover:border-gold-base hover:shadow-glow-gold transition-all duration-300 relative group">
+                <div class="absolute inset-0 rounded-full bg-gold-metal opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                <span class="material-icons-round text-gold-light text-xl relative z-10">bar_chart</span>
             </button>
         </div>
         
         <!-- 搜尋框 -->
-        <div class="relative group mt-2">
-            <div class="absolute -inset-0.5 bg-gradient-to-r from-glam-gold-600 via-glam-gold-300 to-glam-gold-600 rounded-xl opacity-30 group-focus-within:opacity-100 transition duration-500 blur-sm"></div>
-            <div class="relative flex items-center bg-[#0F0F0F] rounded-xl border border-white/10 group-focus-within:border-glam-gold-400/50 shadow-inner transition-all">
+        <div class="mt-4 relative">
+            <div class="relative flex items-center glass-navy rounded-xl shadow-inner-light">
                 <span class="pl-4 flex items-center pointer-events-none">
-                    <span class="material-icons-round text-glam-gold-500/70 group-focus-within:text-glam-gold-300 transition-colors">search</span>
+                    <span class="material-icons-round text-gold-base/70 text-xl">search</span>
                 </span>
-                <input id="searchInput" class="block w-full pl-3 pr-4 py-3 bg-transparent border-none text-glam-gold-100 placeholder-white/20 focus:ring-0 text-sm tracking-wide font-light" placeholder="搜尋文號、主旨、受文者..." type="text" oninput="filterDocuments()"/>
+                <input id="searchInput" class="block w-full pl-3 pr-4 py-3 bg-transparent border-none text-gold-light placeholder-slate-400/40 focus:ring-0 text-sm tracking-wide font-light" placeholder="搜尋尊爵文號..." type="text" oninput="filterDocuments()"/>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1 px-4 py-6 overflow-y-auto pb-32 relative z-10" id="mainContent">
+    <main class="flex-1 px-5 py-6 overflow-y-auto pb-32 relative z-10 max-w-lg mx-auto w-full">
         
         <!-- 篩選按鈕 -->
-        <div class="flex gap-3 mb-8 overflow-x-auto pb-2 scrollbar-hide">
-            <button onclick="setFilter('all')" id="filter-all" class="flex-shrink-0 px-4 py-2 bg-gradient-to-r from-glam-gold-500 to-glam-gold-700 text-black font-bold text-xs rounded-lg shadow-[0_4px_12px_rgba(212,175,55,0.3)] border border-glam-gold-300/50 flex items-center gap-1">
+        <div class="flex gap-3 mb-8 overflow-x-auto pb-2">
+            <button onclick="setFilter('all')" id="filter-all" class="flex-shrink-0 px-4 py-2 bg-gold-metal text-navy-950 font-bold text-xs rounded-lg shadow-glow-gold border border-gold-base/50 flex items-center gap-1">
                 <span class="material-icons-round text-sm">filter_list</span>
                 <span>全部文件</span>
             </button>
-            <button onclick="setFilter('temp')" id="filter-temp" class="flex-shrink-0 px-4 py-2 bg-white/5 text-glam-gold-200 border border-white/10 hover:border-glam-gold-500/50 rounded-lg text-xs font-medium tracking-wide transition-all hover:bg-white/10">
+            <button onclick="setFilter('temp')" id="filter-temp" class="flex-shrink-0 px-4 py-2 glass-navy text-gold-light border-none rounded-lg text-xs font-medium tracking-wide transition-all hover:shadow-glow-gold">
                 臨時號碼 (<span id="tempCount">0</span>)
             </button>
-            <button onclick="setFilter('complete')" id="filter-complete" class="flex-shrink-0 px-4 py-2 bg-white/5 text-gray-400 border border-white/10 hover:border-glam-gold-500/50 rounded-lg text-xs font-medium tracking-wide transition-all hover:bg-white/10">
+            <button onclick="setFilter('complete')" id="filter-complete" class="flex-shrink-0 px-4 py-2 glass-navy text-slate-400 border-none rounded-lg text-xs font-medium tracking-wide transition-all hover:shadow-glow-gold">
                 已完成
             </button>
         </div>
 
-        <!-- 統計卡片 (隱藏) -->
+        <!-- 統計卡片 -->
         <div id="statsPanel" class="hidden mb-6 grid grid-cols-2 gap-3 animate-fadeIn">
-            <div class="bg-[#161616] rounded-xl p-4 border border-white/5 shadow-card-emboss">
+            <div class="glass-navy rounded-xl p-4 gold-trim">
                 <div class="text-3xl font-bold text-gold-gradient mb-1" id="totalCountDisplay">0</div>
-                <div class="text-xs text-white/40 uppercase tracking-wider">總文號數</div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider font-serif">總文號數</div>
             </div>
-            <div class="bg-[#161616] rounded-xl p-4 border border-white/5 shadow-card-emboss">
+            <div class="glass-navy rounded-xl p-4 gold-trim">
                 <div class="text-3xl font-bold text-green-400 mb-1" id="completeCountDisplay">0</div>
-                <div class="text-xs text-white/40 uppercase tracking-wider">已完成</div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider font-serif">已完成</div>
             </div>
-            <div class="bg-[#161616] rounded-xl p-4 border border-white/5 shadow-card-emboss">
-                <div class="text-3xl font-bold text-glam-gold-400 mb-1" id="tempCountDisplay">0</div>
-                <div class="text-xs text-white/40 uppercase tracking-wider">臨時號碼</div>
+            <div class="glass-navy rounded-xl p-4 gold-trim">
+                <div class="text-3xl font-bold text-gold-base mb-1" id="tempCountDisplay">0</div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider font-serif">臨時號碼</div>
             </div>
-            <div class="bg-[#161616] rounded-xl p-4 border border-white/5 shadow-card-emboss">
+            <div class="glass-navy rounded-xl p-4 gold-trim">
                 <div class="text-3xl font-bold text-blue-400 mb-1" id="todayCountDisplay">0</div>
-                <div class="text-xs text-white/40 uppercase tracking-wider">今日新增</div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider font-serif">今日新增</div>
             </div>
         </div>
 
-        <!-- 文件列表標題 -->
-        <div class="flex items-center justify-between mb-6 px-1">
-            <h2 class="text-xl font-display text-white flex items-center gap-3">
-                <span class="material-icons-round text-glam-gold-400 text-lg">stars</span>
-                <span class="text-gold-gradient font-bold tracking-wider">文件列表</span>
-            </h2>
-            <span class="text-[10px] font-serif italic text-white/30 border-b border-white/10 pb-0.5">Royal Edition</span>
+        <!-- 標題 -->
+        <div class="flex items-center gap-3 pl-1 mb-6">
+            <span class="material-icons-round text-gold-base text-base drop-shadow-md">diamond</span>
+            <h3 class="text-xs font-serif font-bold text-gold-light tracking-[0.25em] uppercase">文件列表</h3>
+            <div class="h-[1px] flex-1 bg-gradient-to-r from-gold-base/40 to-transparent"></div>
         </div>
 
         <!-- 文件列表 -->
-        <div id="docList" class="space-y-6">
+        <div id="docList" class="space-y-4">
             <!-- 文件卡片將在這裡動態生成 -->
         </div>
 
         <!-- 空狀態 -->
         <div id="emptyState" class="hidden text-center py-20">
-            <span class="material-icons-round text-6xl text-white/10 mb-4">inbox</span>
-            <p class="text-white/30 text-sm font-serif">目前沒有文號資料</p>
+            <span class="material-icons-round text-6xl text-navy-700/30 mb-4">inbox</span>
+            <p class="text-slate-400/40 text-sm font-serif">目前沒有文號資料</p>
         </div>
     </main>
 
     <!-- 底部導航 -->
-    <nav class="fixed bottom-0 w-full glass-panel border-t border-white/10 z-40 pb-safe shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-glam-gold-400 to-transparent shadow-[0_0_10px_#D4AF37]"></div>
-        <div class="flex justify-around items-center h-16 px-2">
-            <button onclick="switchPage('manage')" id="nav-manage" class="flex flex-col items-center justify-center w-full h-full space-y-1 text-gray-500 hover:text-glam-gold-200 transition-colors group">
-                <span class="material-icons-round text-2xl group-hover:scale-110 transition-transform duration-300">assignment</span>
-                <span class="text-[9px] font-medium tracking-widest uppercase">管理</span>
+    <nav class="fixed bottom-0 w-full z-50 bg-navy-950/90 backdrop-blur-xl border-t border-gold-base/30 pb-6 pt-2 shadow-[0_-5px_20px_rgba(0,0,0,0.4)]">
+        <div class="flex justify-around items-end h-16 max-w-lg mx-auto relative px-2">
+            <div id="activeIndicator" class="absolute top-0 w-12 h-[2px] bg-gold-shine shadow-[0_0_15px_#FFD700] rounded-full z-20 transition-all duration-300"></div>
+            <div id="activeGlow" class="absolute top-0 w-12 h-20 bg-gradient-to-b from-gold-base/10 to-transparent pointer-events-none blur-sm transition-all duration-300"></div>
+            
+            <button onclick="switchPage('add')" id="nav-add" class="group flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-gold-base transition-colors duration-300">
+                <span class="material-icons-round text-[26px] mb-1 group-hover:scale-110 transition-transform duration-300">add_circle_outline</span>
+                <span class="text-[9px] font-serif tracking-widest opacity-70 group-hover:opacity-100 uppercase">New</span>
             </button>
-            <button onclick="switchPage('add')" id="nav-add" class="relative -top-5">
-                <div class="absolute inset-0 bg-glam-gold-400/20 blur-xl rounded-full"></div>
-                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-glam-gold-300 to-glam-gold-600 flex items-center justify-center shadow-[0_4px_10px_rgba(212,175,55,0.4)] border border-glam-gold-200/50 relative z-10">
-                    <span class="material-icons-round text-3xl text-black drop-shadow-sm">add_circle</span>
-                </div>
-                <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[9px] font-bold text-glam-gold-300 tracking-widest uppercase whitespace-nowrap">新增</span>
+            
+            <button onclick="switchPage('manage')" id="nav-manage" class="flex flex-col items-center justify-center w-full h-full relative">
+                <div class="absolute inset-0 bg-gold-base/5 blur-xl rounded-full opacity-50"></div>
+                <span class="material-icons-round text-[28px] mb-1 relative z-10 text-transparent bg-clip-text bg-gold-metal drop-shadow-[0_0_10px_rgba(212,175,55,0.6)]">folder_open</span>
+                <span class="text-[9px] font-bold font-serif tracking-widest relative z-10 text-gold-light uppercase">Manage</span>
             </button>
-            <button onclick="switchPage('settings')" id="nav-settings" class="flex flex-col items-center justify-center w-full h-full space-y-1 text-gray-500 hover:text-glam-gold-200 transition-colors group">
-                <span class="material-icons-round text-2xl group-hover:scale-110 transition-transform duration-300">settings</span>
-                <span class="text-[9px] font-medium tracking-widest uppercase">設定</span>
+            
+            <button onclick="switchPage('stats')" id="nav-stats" class="group flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-gold-base transition-colors duration-300">
+                <span class="material-icons-round text-[26px] mb-1 group-hover:scale-110 transition-transform duration-300">bar_chart</span>
+                <span class="text-[9px] font-serif tracking-widest opacity-70 group-hover:opacity-100 uppercase">Stats</span>
+            </button>
+            
+            <button onclick="switchPage('settings')" id="nav-settings" class="group flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-gold-base transition-colors duration-300">
+                <span class="material-icons-round text-[26px] mb-1 group-hover:scale-110 transition-transform duration-300">settings</span>
+                <span class="text-[9px] font-serif tracking-widest opacity-70 group-hover:opacity-100 uppercase">Settings</span>
             </button>
         </div>
     </nav>
 
-    <!-- 新增文號 Modal -->
+    <div class="fixed bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-navy-950 via-navy-950/60 to-transparent pointer-events-none z-40"></div>
+
+    <!-- 新增 Modal -->
     <div id="addModal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-overlay">
         <div class="flex min-h-full items-end justify-center p-4">
             <div class="relative w-full max-w-lg transform transition-all animate-fadeIn">
-                <div class="bg-[#121212] rounded-t-3xl border border-white/10 shadow-2xl">
-                    <!-- Modal Header -->
-                    <div class="bg-gradient-to-r from-glam-gold-900/40 to-transparent px-6 py-4 border-b border-white/5 flex justify-between items-center">
+                <div class="glass-navy rounded-t-3xl gold-trim shadow-2xl">
+                    <div class="px-6 py-4 border-b border-gold-base/20 flex justify-between items-center bg-navy-800/30">
                         <div class="flex items-center gap-3">
-                            <span class="material-icons-round text-glam-gold-400">add_circle</span>
-                            <h3 class="text-lg font-display text-gold-gradient font-bold tracking-wider">新增發文字號</h3>
+                            <span class="material-icons-round text-gold-base">add_circle</span>
+                            <h3 class="text-lg font-serif text-gold-gradient font-bold tracking-wider">新增發文字號</h3>
                         </div>
-                        <button onclick="closeAddModal()" class="text-white/50 hover:text-white transition-colors">
+                        <button onclick="closeAddModal()" class="text-slate-400 hover:text-white transition-colors">
                             <span class="material-icons-round">close</span>
                         </button>
                     </div>
 
-                    <!-- Modal Body -->
                     <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
-                        <!-- 公司選擇模式切換 -->
                         <div class="flex gap-2">
-                            <button onclick="switchInputModeModal('select')" id="toggle-select" class="flex-1 py-2 px-4 bg-gradient-to-r from-glam-gold-500 to-glam-gold-700 text-black font-bold text-xs rounded-lg border border-glam-gold-300/50">
+                            <button onclick="switchInputModeModal('select')" id="toggle-select" class="flex-1 py-2 px-4 bg-gold-metal text-navy-950 font-bold text-xs rounded-lg border border-gold-base/50">
                                 選擇公司
                             </button>
-                            <button onclick="switchInputModeModal('custom')" id="toggle-custom" class="flex-1 py-2 px-4 bg-white/5 text-glam-gold-200 border border-white/10 rounded-lg text-xs font-medium">
+                            <button onclick="switchInputModeModal('custom')" id="toggle-custom" class="flex-1 py-2 px-4 glass-navy text-gold-light text-xs font-medium rounded-lg">
                                 自訂代碼
                             </button>
                         </div>
 
-                        <!-- 選擇模式 -->
                         <div id="selectModeModal">
-                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">公司名稱</label>
-                            <select id="companySelectModal" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all">
+                            <label class="block text-xs text-gold-base mb-2 font-bold tracking-wider uppercase font-serif">公司名稱</label>
+                            <select id="companySelectModal" class="w-full px-4 py-3 bg-navy-900/50 border border-gold-base/20 rounded-lg text-gold-light text-sm focus:border-gold-base focus:ring-0 transition-all">
                                 <option value="">請選擇公司</option>
                             </select>
                         </div>
 
-                        <!-- 自訂模式 -->
                         <div id="customModeModal" class="hidden">
-                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">公司代碼（自訂）</label>
-                            <input type="text" id="customCompanyCodeModal" placeholder="例如：昊陽" maxlength="10" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all placeholder-white/20">
+                            <label class="block text-xs text-gold-base mb-2 font-bold tracking-wider uppercase font-serif">公司代碼（自訂）</label>
+                            <input type="text" id="customCompanyCodeModal" placeholder="例如：昊陽" maxlength="10" class="w-full px-4 py-3 bg-navy-900/50 border border-gold-base/20 rounded-lg text-gold-light text-sm focus:border-gold-base focus:ring-0 transition-all placeholder-slate-400/30">
                         </div>
 
-                        <!-- 部門代碼 -->
                         <div>
-                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">部門代碼</label>
-                            <select id="deptCodeModal" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all" required>
+                            <label class="block text-xs text-gold-base mb-2 font-bold tracking-wider uppercase font-serif">部門代碼</label>
+                            <select id="deptCodeModal" class="w-full px-4 py-3 bg-navy-900/50 border border-gold-base/20 rounded-lg text-gold-light text-sm focus:border-gold-base focus:ring-0 transition-all" required>
                                 <option value="">請選擇部門</option>
                             </select>
                         </div>
 
-                        <!-- 發文日期 -->
                         <div>
-                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">發文日期</label>
-                            <input type="date" id="docDateModal" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all" required>
-                            <p class="text-[10px] text-white/30 mt-2">💡 此日期將影響文號的日期部分</p>
+                            <label class="block text-xs text-gold-base mb-2 font-bold tracking-wider uppercase font-serif">發文日期</label>
+                            <input type="date" id="docDateModal" class="w-full px-4 py-3 bg-navy-900/50 border border-gold-base/20 rounded-lg text-gold-light text-sm focus:border-gold-base focus:ring-0 transition-all" required>
+                            <p class="text-[10px] text-slate-400/50 mt-2 font-light">💡 此日期將影響文號的日期部分</p>
                         </div>
 
-                        <!-- 主旨 -->
                         <div>
-                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">主旨</label>
-                            <input type="text" id="subjectModal" placeholder="請輸入文件主旨" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all placeholder-white/20">
+                            <label class="block text-xs text-gold-base mb-2 font-bold tracking-wider uppercase font-serif">主旨</label>
+                            <input type="text" id="subjectModal" placeholder="請輸入文件主旨" class="w-full px-4 py-3 bg-navy-900/50 border border-gold-base/20 rounded-lg text-gold-light text-sm focus:border-gold-base focus:ring-0 transition-all placeholder-slate-400/30">
                         </div>
 
-                        <!-- 受文者 -->
                         <div>
-                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">受文者</label>
-                            <input type="text" id="recipientModal" placeholder="請輸入受文者" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all placeholder-white/20">
+                            <label class="block text-xs text-gold-base mb-2 font-bold tracking-wider uppercase font-serif">受文者</label>
+                            <input type="text" id="recipientModal" placeholder="請輸入受文者" class="w-full px-4 py-3 bg-navy-900/50 border border-gold-base/20 rounded-lg text-gold-light text-sm focus:border-gold-base focus:ring-0 transition-all placeholder-slate-400/30">
                         </div>
                     </div>
 
-                    <!-- Modal Footer -->
                     <div class="p-6 pt-0 grid grid-cols-2 gap-3">
-                        <button onclick="generateTempNumberModal()" class="py-3 bg-white/5 hover:bg-white/10 text-glam-gold-200 border border-white/10 hover:border-glam-gold-500/30 rounded-lg text-sm font-bold tracking-wide transition-all flex items-center justify-center gap-2">
+                        <button onclick="generateTempNumberModal()" class="py-3 glass-navy hover:bg-navy-800/50 text-gold-light rounded-lg text-sm font-bold tracking-wide transition-all flex items-center justify-center gap-2">
                             <span class="material-icons-round text-sm">schedule</span>
                             <span>臨時號碼</span>
                         </button>
-                        <button onclick="submitDocModal()" class="relative overflow-hidden group/btn rounded-lg">
-                            <div class="absolute inset-0 bg-gold-plate"></div>
-                            <div class="absolute inset-0 bg-white/20 opacity-0 group-hover/btn:opacity-100 transition-opacity"></div>
-                            <div class="relative py-3 flex items-center justify-center gap-2 text-black font-bold text-sm tracking-wide">
+                        <button onclick="submitDocModal()" class="relative overflow-hidden rounded-lg">
+                            <div class="absolute inset-0 bg-gold-metal"></div>
+                            <div class="relative py-3 flex items-center justify-center gap-2 text-navy-950 font-bold text-sm tracking-wide">
                                 <span class="material-icons-round text-sm">check_circle</span>
                                 <span>完整建檔</span>
                             </div>
@@ -307,34 +315,34 @@
     <div id="editModal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-overlay">
         <div class="flex min-h-full items-end justify-center p-4">
             <div class="relative w-full max-w-lg transform transition-all animate-fadeIn">
-                <div class="bg-[#121212] rounded-t-3xl border border-white/10 shadow-2xl">
-                    <div class="bg-gradient-to-r from-glam-gold-900/40 to-transparent px-6 py-4 border-b border-white/5 flex justify-between items-center">
+                <div class="glass-navy rounded-t-3xl gold-trim shadow-2xl">
+                    <div class="px-6 py-4 border-b border-gold-base/20 flex justify-between items-center bg-navy-800/30">
                         <div class="flex items-center gap-3">
-                            <span class="material-icons-round text-glam-gold-400">edit</span>
-                            <h3 class="text-lg font-display text-gold-gradient font-bold tracking-wider">編輯文號</h3>
+                            <span class="material-icons-round text-gold-base">edit</span>
+                            <h3 class="text-lg font-serif text-gold-gradient font-bold tracking-wider">編輯文號</h3>
                         </div>
-                        <button onclick="closeEditModal()" class="text-white/50 hover:text-white transition-colors">
+                        <button onclick="closeEditModal()" class="text-slate-400 hover:text-white transition-colors">
                             <span class="material-icons-round">close</span>
                         </button>
                     </div>
                     <div class="p-6 space-y-4">
                         <input type="hidden" id="editDocId">
                         <div>
-                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">主旨</label>
-                            <input type="text" id="editSubject" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all">
+                            <label class="block text-xs text-gold-base mb-2 font-bold tracking-wider uppercase font-serif">主旨</label>
+                            <input type="text" id="editSubject" class="w-full px-4 py-3 bg-navy-900/50 border border-gold-base/20 rounded-lg text-gold-light text-sm focus:border-gold-base focus:ring-0 transition-all">
                         </div>
                         <div>
-                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">受文者</label>
-                            <input type="text" id="editRecipient" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all">
+                            <label class="block text-xs text-gold-base mb-2 font-bold tracking-wider uppercase font-serif">受文者</label>
+                            <input type="text" id="editRecipient" class="w-full px-4 py-3 bg-navy-900/50 border border-gold-base/20 rounded-lg text-gold-light text-sm focus:border-gold-base focus:ring-0 transition-all">
                         </div>
                     </div>
                     <div class="p-6 pt-0 grid grid-cols-2 gap-3">
-                        <button onclick="closeEditModal()" class="py-3 bg-white/5 hover:bg-white/10 text-gray-400 border border-white/10 rounded-lg text-sm font-medium transition-all">
+                        <button onclick="closeEditModal()" class="py-3 glass-navy text-slate-300 rounded-lg text-sm font-medium transition-all hover:bg-navy-800/50">
                             取消
                         </button>
-                        <button onclick="submitEdit()" class="relative overflow-hidden group/btn rounded-lg">
-                            <div class="absolute inset-0 bg-gold-plate"></div>
-                            <div class="relative py-3 text-black font-bold text-sm tracking-wide">儲存</div>
+                        <button onclick="submitEdit()" class="relative overflow-hidden rounded-lg">
+                            <div class="absolute inset-0 bg-gold-metal"></div>
+                            <div class="relative py-3 text-navy-950 font-bold text-sm tracking-wide">儲存</div>
                         </button>
                     </div>
                 </div>
@@ -342,41 +350,49 @@
         </div>
     </div>
 
-    <!-- 設定頁面 Modal -->
+    <!-- 設定 Modal -->
     <div id="settingsModal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-overlay">
         <div class="flex min-h-full items-end justify-center p-4">
             <div class="relative w-full max-w-lg transform transition-all animate-fadeIn">
-                <div class="bg-[#121212] rounded-t-3xl border border-white/10 shadow-2xl">
-                    <div class="bg-gradient-to-r from-glam-gold-900/40 to-transparent px-6 py-4 border-b border-white/5 flex justify-between items-center">
+                <div class="glass-navy rounded-t-3xl gold-trim shadow-2xl">
+                    <div class="px-6 py-4 border-b border-gold-base/20 flex justify-between items-center bg-navy-800/30">
                         <div class="flex items-center gap-3">
-                            <span class="material-icons-round text-glam-gold-400">settings</span>
-                            <h3 class="text-lg font-display text-gold-gradient font-bold tracking-wider">系統設定</h3>
+                            <span class="material-icons-round text-gold-base">settings</span>
+                            <h3 class="text-lg font-serif text-gold-gradient font-bold tracking-wider">系統設定</h3>
                         </div>
-                        <button onclick="closeSettingsModal()" class="text-white/50 hover:text-white transition-colors">
+                        <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white transition-colors">
                             <span class="material-icons-round">close</span>
                         </button>
                     </div>
                     <div class="p-6 space-y-6">
                         <div>
-                            <h4 class="text-sm font-bold text-glam-gold-300 mb-4 uppercase tracking-wider">資料管理</h4>
+                            <div class="flex items-center gap-3 pl-1 mb-4">
+                                <span class="material-icons-round text-gold-base text-base">diamond</span>
+                                <h4 class="text-xs font-serif font-bold text-gold-light tracking-[0.25em] uppercase">資料管理</h4>
+                            </div>
                             <div class="space-y-3">
-                                <button onclick="exportToCSV()" class="w-full py-3 bg-white/5 hover:bg-white/10 text-glam-gold-200 border border-white/10 hover:border-glam-gold-500/30 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
-                                    <span class="material-icons-round text-sm">download</span>
+                                <button onclick="exportToCSV()" class="w-full py-3 glass-navy hover:bg-navy-800/50 text-gold-light rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 shadow-inner-light">
+                                    <span class="material-icons-round text-sm">file_download</span>
                                     <span>匯出 CSV 檔案</span>
                                 </button>
-                                <button onclick="confirmClearAll()" class="w-full py-3 bg-red-900/10 hover:bg-red-900/20 text-red-400 border border-red-500/20 hover:border-red-500/40 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                                <button onclick="confirmClearAll()" class="w-full py-3 bg-red-900/20 hover:bg-red-900/30 text-red-400 border border-red-500/20 hover:border-red-500/40 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
                                     <span class="material-icons-round text-sm">delete_forever</span>
                                     <span>清空所有資料</span>
                                 </button>
                             </div>
                         </div>
-                        <div class="bg-[#0F0F0F] rounded-xl p-4 border border-white/5">
-                            <h4 class="text-sm font-bold text-glam-gold-300 mb-3 uppercase tracking-wider">關於系統</h4>
-                            <div class="space-y-2 text-xs text-white/50">
-                                <p><span class="text-glam-gold-400">系統版本：</span>V1.1 Golden Edition</p>
-                                <p><span class="text-glam-gold-400">更新內容：</span>黑金奢華風格、日期選擇</p>
-                                <p><span class="text-glam-gold-400">儲存方式：</span>瀏覽器本地儲存</p>
-                                <p class="text-[10px] text-white/30 mt-3">所有資料儲存在您的裝置上，不會上傳至伺服器</p>
+                        <div class="glass-navy rounded-xl overflow-hidden gold-trim">
+                            <div class="p-5 bg-gradient-to-br from-navy-800/80 to-navy-950/80">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <span class="material-icons-round text-gold-base text-sm">info</span>
+                                    <h4 class="text-xs font-serif font-bold text-gold-light tracking-[0.25em] uppercase">關於系統</h4>
+                                </div>
+                                <div class="space-y-2 text-xs text-slate-400 font-light">
+                                    <p><span class="text-gold-base">系統版本：</span>V1.1 Imperial Edition</p>
+                                    <p><span class="text-gold-base">更新內容：</span>海軍藍奢華風格、流水號3碼</p>
+                                    <p><span class="text-gold-base">儲存方式：</span>瀏覽器本地儲存</p>
+                                    <p class="text-[10px] text-slate-500 mt-3">您的資料如同深海寶藏般珍貴，僅存儲於本機</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -385,11 +401,11 @@
         </div>
     </div>
 
-    <!-- Toast 通知 -->
+    <!-- Toast -->
     <div id="toast" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-50 animate-fadeIn">
-        <div class="bg-[#1a1a1a] border border-glam-gold-500/30 rounded-xl px-6 py-3 shadow-2xl flex items-center gap-3">
-            <span class="material-icons-round text-glam-gold-400 text-lg">check_circle</span>
-            <span id="toastMessage" class="text-sm text-white font-medium"></span>
+        <div class="glass-navy rounded-xl px-6 py-3 gold-trim shadow-2xl flex items-center gap-3">
+            <span class="material-icons-round text-gold-base text-lg">check_circle</span>
+            <span id="toastMessage" class="text-sm text-gold-light font-medium"></span>
         </div>
     </div>
 
@@ -479,6 +495,7 @@
         let documents = [];
         let currentFilter = 'all';
         let currentInputMode = 'select';
+        let currentPage = 'manage';
 
         // ========== 初始化 ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -487,6 +504,7 @@
             loadDocuments();
             updateStats();
             renderDocuments();
+            updateNavIndicator();
         });
 
         function initializeSelects() {
@@ -509,13 +527,49 @@
 
         // ========== 頁面切換 ==========
         function switchPage(page) {
+            currentPage = page;
+            updateNavIndicator();
+            
             if (page === 'add') {
                 document.getElementById('addModal').classList.remove('hidden');
             } else if (page === 'settings') {
                 document.getElementById('settingsModal').classList.remove('hidden');
-            } else if (page === 'manage') {
-                // 已經在管理頁面，不需要做什麼
+            } else if (page === 'stats') {
+                showStats();
             }
+        }
+
+        function updateNavIndicator() {
+            const pages = ['add', 'manage', 'stats', 'settings'];
+            const buttons = pages.map(p => document.getElementById(`nav-${p}`));
+            const indicator = document.getElementById('activeIndicator');
+            const glow = document.getElementById('activeGlow');
+            
+            pages.forEach((page, index) => {
+                const btn = buttons[index];
+                const isActive = page === currentPage;
+                
+                if (isActive) {
+                    btn.className = 'flex flex-col items-center justify-center w-full h-full relative';
+                    btn.innerHTML = `
+                        <div class="absolute inset-0 bg-gold-base/5 blur-xl rounded-full opacity-50"></div>
+                        <span class="material-icons-round text-[28px] mb-1 relative z-10 text-transparent bg-clip-text bg-gold-metal drop-shadow-[0_0_10px_rgba(212,175,55,0.6)]">${page === 'add' ? 'add_circle_outline' : page === 'manage' ? 'folder_open' : page === 'stats' ? 'bar_chart' : 'settings'}</span>
+                        <span class="text-[9px] font-bold font-serif tracking-widest relative z-10 text-gold-light uppercase">${page === 'add' ? 'New' : page === 'manage' ? 'Manage' : page === 'stats' ? 'Stats' : 'Settings'}</span>
+                    `;
+                    
+                    const btnRect = btn.getBoundingClientRect();
+                    const containerRect = btn.parentElement.getBoundingClientRect();
+                    const left = btnRect.left - containerRect.left + (btnRect.width - 48) / 2;
+                    indicator.style.left = `${left}px`;
+                    glow.style.left = `${left}px`;
+                } else {
+                    btn.className = 'group flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-gold-base transition-colors duration-300';
+                    btn.innerHTML = `
+                        <span class="material-icons-round text-[26px] mb-1 group-hover:scale-110 transition-transform duration-300">${page === 'add' ? 'add_circle_outline' : page === 'manage' ? 'folder_open' : page === 'stats' ? 'bar_chart' : 'settings'}</span>
+                        <span class="text-[9px] font-serif tracking-widest opacity-70 group-hover:opacity-100 uppercase">${page === 'add' ? 'New' : page === 'manage' ? 'Manage' : page === 'stats' ? 'Stats' : 'Settings'}</span>
+                    `;
+                }
+            });
         }
 
         function closeAddModal() {
@@ -541,13 +595,13 @@
             if (mode === 'select') {
                 selectMode.classList.remove('hidden');
                 customMode.classList.add('hidden');
-                btnSelect.className = 'flex-1 py-2 px-4 bg-gradient-to-r from-glam-gold-500 to-glam-gold-700 text-black font-bold text-xs rounded-lg border border-glam-gold-300/50';
-                btnCustom.className = 'flex-1 py-2 px-4 bg-white/5 text-glam-gold-200 border border-white/10 rounded-lg text-xs font-medium';
+                btnSelect.className = 'flex-1 py-2 px-4 bg-gold-metal text-navy-950 font-bold text-xs rounded-lg border border-gold-base/50';
+                btnCustom.className = 'flex-1 py-2 px-4 glass-navy text-gold-light text-xs font-medium rounded-lg';
             } else {
                 selectMode.classList.add('hidden');
                 customMode.classList.remove('hidden');
-                btnSelect.className = 'flex-1 py-2 px-4 bg-white/5 text-glam-gold-200 border border-white/10 rounded-lg text-xs font-medium';
-                btnCustom.className = 'flex-1 py-2 px-4 bg-gradient-to-r from-glam-gold-500 to-glam-gold-700 text-black font-bold text-xs rounded-lg border border-glam-gold-300/50';
+                btnSelect.className = 'flex-1 py-2 px-4 glass-navy text-gold-light text-xs font-medium rounded-lg';
+                btnCustom.className = 'flex-1 py-2 px-4 bg-gold-metal text-navy-950 font-bold text-xs rounded-lg border border-gold-base/50';
             }
         }
 
@@ -588,7 +642,7 @@
                        docDateStr === currentDateStr;
             });
 
-            const serial = String(sameDayDocs.length + 1).padStart(4, '0');
+            const serial = String(sameDayDocs.length + 1).padStart(3, '0');
             const docNumber = `${companyCode}${deptCode}字第${rocYear}${month}${day}${serial}號`;
 
             return {
@@ -642,7 +696,6 @@
             closeAddModal();
             showToast(`✅ 已建立文號：${docInfo.docNumber}`);
 
-            // 清空表單
             document.getElementById('subjectModal').value = '';
             document.getElementById('recipientModal').value = '';
         }
@@ -726,66 +779,66 @@
                 const companyName = COMPANIES.find(c => c.code === doc.companyCode)?.name || doc.companyCode;
 
                 return `
-                    <article class="group relative transition-all duration-300 transform hover:-translate-y-1">
-                        <div class="absolute -inset-[1px] bg-gradient-to-b from-glam-gold-300 via-glam-gold-600 to-transparent rounded-2xl opacity-60 group-hover:opacity-100 blur-[2px] transition-opacity duration-500"></div>
-                        <div class="relative bg-[#161616] rounded-2xl p-0 overflow-hidden shadow-card-emboss border border-white/5">
-                            <div class="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/40 pointer-events-none"></div>
-                            <div class="absolute right-0 top-0 w-32 h-32 bg-glam-gold-500/10 blur-[50px] rounded-full"></div>
+                    <div class="group relative overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-card-depth">
+                        <div class="absolute inset-0 p-[1px] rounded-2xl bg-gradient-to-br from-gold-base via-gold-light/40 to-gold-dark/60 opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="relative h-full bg-card-gradient rounded-2xl overflow-hidden">
+                            <div class="absolute inset-0 bg-gloss-overlay opacity-30 pointer-events-none"></div>
+                            <div class="absolute -right-8 -top-8 w-32 h-32 bg-gold-base/10 blur-3xl rounded-full ${isTemp ? 'animate-pulse' : ''}"></div>
                             
-                            <div class="bg-gradient-to-r from-glam-gold-900/40 to-transparent px-5 py-3 border-b border-white/5 flex justify-between items-center relative">
+                            <div class="px-5 py-3 border-b border-gold-base/10 flex justify-between items-center relative z-10 bg-navy-800/30">
                                 <div class="flex items-center gap-2">
                                     ${isTemp ? `
-                                        <div class="w-1.5 h-1.5 rounded-full bg-glam-gold-400 shadow-[0_0_8px_#D4AF37]"></div>
-                                        <span class="text-[10px] font-display font-bold tracking-[0.2em] text-glam-gold-300 uppercase">Priority High</span>
+                                        <span class="w-1 h-1 bg-gold-base rounded-full shadow-[0_0_5px_#D4AF37] animate-pulse"></span>
+                                        <span class="text-[10px] font-serif font-bold tracking-[0.2em] text-gold-base uppercase">Priority</span>
                                     ` : `
-                                        <div class="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_8px_#22c55e]"></div>
-                                        <span class="text-[10px] font-display font-bold tracking-[0.2em] text-green-300 uppercase">Completed</span>
+                                        <span class="w-1 h-1 bg-green-400 rounded-full shadow-[0_0_5px_#22c55e]"></span>
+                                        <span class="text-[10px] font-serif font-bold tracking-[0.2em] text-green-300 uppercase">Complete</span>
                                     `}
                                 </div>
-                                <span class="text-[10px] font-serif italic text-white/40">${formattedDate}</span>
+                                <span class="text-[10px] font-serif text-slate-400">${formattedDate}</span>
                             </div>
 
-                            <div class="p-5 pt-4 relative">
+                            <div class="p-5 pt-4 relative z-10">
                                 <div class="mb-4">
                                     <!-- 金色發光框文號 -->
-                                    <div class="inline-block px-4 py-2 mb-3 bg-gradient-to-r from-glam-gold-900/40 to-glam-gold-700/40 border-2 border-glam-gold-400/80 rounded-lg shadow-[0_0_20px_rgba(212,175,55,0.5)]">
-                                        <span class="block text-base font-bold tracking-wider text-glam-gold-200 font-mono drop-shadow-[0_2px_8px_rgba(212,175,55,0.8)]">${doc.docNumber}</span>
+                                    <div class="inline-block px-4 py-2 mb-3 bg-gradient-to-r from-gold-base/20 to-gold-bronze/20 border-2 border-gold-base/60 rounded-lg shadow-glow-gold backdrop-blur-sm">
+                                        <span class="block text-base font-bold tracking-wider text-gold-light font-mono drop-shadow-[0_2px_8px_rgba(212,175,55,0.8)]">${doc.docNumber}</span>
                                     </div>
-                                    <h3 class="text-sm font-serif text-white/70 leading-tight tracking-wide">
+                                    <h3 class="text-sm font-serif text-slate-300 leading-tight tracking-wide">
                                         ${companyName}
                                     </h3>
-                                    ${doc.subject ? `<p class="text-sm text-white/60 mt-2 font-light">📝 ${doc.subject}</p>` : ''}
-                                    ${doc.recipient ? `<p class="text-sm text-white/60 mt-1 font-light">👤 ${doc.recipient}</p>` : ''}
+                                    ${doc.subject ? `<p class="text-sm text-slate-400 mt-2 font-light">📝 ${doc.subject}</p>` : ''}
+                                    ${doc.recipient ? `<p class="text-sm text-slate-400 mt-1 font-light">👤 ${doc.recipient}</p>` : ''}
                                 </div>
 
                                 <div class="flex flex-wrap gap-2 mb-6">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-sm border ${isTemp ? 'border-glam-gold-500/30 bg-glam-gold-500/10 text-glam-gold-300' : 'border-green-500/30 bg-green-500/10 text-green-300'} text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-sm border ${isTemp ? 'border-gold-base/30 bg-gold-base/10 text-gold-base' : 'border-green-500/30 bg-green-500/10 text-green-300'} text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm">
                                         <span class="material-icons-round text-[10px] mr-1">${isTemp ? 'bolt' : 'check_circle'}</span> 
                                         ${isTemp ? '臨時' : '已完成'}
                                     </span>
                                 </div>
 
-                                <div class="grid ${isTemp ? 'grid-cols-4' : 'grid-cols-3'} gap-3 pt-4 border-t border-white/5 relative">
+                                <div class="grid ${isTemp ? 'grid-cols-4' : 'grid-cols-3'} gap-3 pt-4 border-t border-gold-base/10">
                                     ${isTemp ? `
-                                        <button onclick="completeDocument(${doc.id})" class="col-span-2 relative overflow-hidden group/btn rounded-lg">
-                                            <div class="absolute inset-0 bg-gold-plate"></div>
+                                        <button onclick="completeDocument(${doc.id})" class="col-span-2 relative overflow-hidden rounded-lg group/btn">
+                                            <div class="absolute inset-0 bg-gold-metal"></div>
                                             <div class="absolute inset-0 bg-white/20 opacity-0 group-hover/btn:opacity-100 transition-opacity"></div>
-                                            <div class="relative py-2.5 flex items-center justify-center gap-2 text-black font-bold text-xs tracking-wide">
+                                            <div class="relative py-2.5 flex items-center justify-center gap-2 text-navy-950 font-bold text-xs tracking-wide">
                                                 <span class="material-icons-round text-sm">check_circle</span>
                                                 <span>完成</span>
                                             </div>
                                         </button>
                                     ` : ''}
-                                    <button onclick="editDocument(${doc.id})" class="col-span-1 py-2.5 bg-[#222] hover:bg-[#2a2a2a] text-glam-gold-300 border border-white/10 hover:border-glam-gold-500/30 rounded-lg flex items-center justify-center transition-all">
+                                    <button onclick="editDocument(${doc.id})" class="col-span-1 py-2.5 glass-navy hover:bg-navy-800/50 text-gold-base hover:text-gold-light rounded-lg flex items-center justify-center transition-all">
                                         <span class="material-icons-round text-lg">edit</span>
                                     </button>
-                                    <button onclick="deleteDocument(${doc.id})" class="col-span-1 py-2.5 bg-[#222] hover:bg-red-900/20 text-gray-500 hover:text-red-400 border border-white/10 hover:border-red-500/30 rounded-lg flex items-center justify-center transition-all">
+                                    <button onclick="deleteDocument(${doc.id})" class="col-span-1 py-2.5 glass-navy hover:bg-red-900/20 text-slate-500 hover:text-red-400 rounded-lg flex items-center justify-center transition-all">
                                         <span class="material-icons-round text-lg">delete</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    </article>
+                    </div>
                 `;
             }).join('');
         }
@@ -794,13 +847,12 @@
         function setFilter(filter) {
             currentFilter = filter;
             
-            // 更新按鈕樣式
             ['all', 'temp', 'complete'].forEach(f => {
                 const btn = document.getElementById(`filter-${f}`);
                 if (f === filter) {
-                    btn.className = 'flex-shrink-0 px-4 py-2 bg-gradient-to-r from-glam-gold-500 to-glam-gold-700 text-black font-bold text-xs rounded-lg shadow-[0_4px_12px_rgba(212,175,55,0.3)] border border-glam-gold-300/50 flex items-center gap-1';
+                    btn.className = 'flex-shrink-0 px-4 py-2 bg-gold-metal text-navy-950 font-bold text-xs rounded-lg shadow-glow-gold border border-gold-base/50 flex items-center gap-1';
                 } else {
-                    btn.className = 'flex-shrink-0 px-4 py-2 bg-white/5 text-gray-400 border border-white/10 hover:border-glam-gold-500/50 rounded-lg text-xs font-medium tracking-wide transition-all hover:bg-white/10';
+                    btn.className = 'flex-shrink-0 px-4 py-2 glass-navy text-slate-400 border-none rounded-lg text-xs font-medium tracking-wide transition-all hover:shadow-glow-gold';
                 }
             });
 
