@@ -3,892 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>發文管理系統 V1.1</title>
+    <title>GOLDEN DMS - 發文管理系統</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "glam-dark": "#050505",
+                        "glam-card": "#121212",
+                        "glam-gold": {
+                            100: "#FBF5D4",
+                            200: "#F3E5AB",
+                            300: "#E3C580",
+                            400: "#D4AF37",
+                            500: "#B4941F",
+                            600: "#8A6E28",
+                            900: "#3E2F0A",
+                        },
+                    },
+                    fontFamily: {
+                        sans: ["'Noto Sans TC'", "sans-serif"],
+                        serif: ["'Playfair Display'", "serif"],
+                        display: ["'Cinzel'", "serif"],
+                    },
+                    backgroundImage: {
+                        'luxury-gradient': 'radial-gradient(circle at 50% 0%, #2a2a2a 0%, #050505 100%)',
+                        'gold-shimmer': 'linear-gradient(45deg, rgba(212, 175, 55, 0) 40%, rgba(212, 175, 55, 0.2) 50%, rgba(212, 175, 55, 0) 60%)',
+                        'gold-plate': 'linear-gradient(180deg, #F3E5AB 0%, #D4AF37 40%, #B4941F 100%)',
+                        'dark-plate': 'linear-gradient(180deg, #2D2D2D 0%, #121212 100%)',
+                    },
+                    boxShadow: {
+                        'gold-glow': '0 0 20px rgba(212, 175, 55, 0.15)',
+                        'card-emboss': 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 20px rgba(0,0,0,0.5)',
+                        'inner-glow': 'inset 0 0 20px rgba(212, 175, 55, 0.05)',
+                    },
+                    animation: {
+                        'shimmer': 'shimmer 3s infinite linear',
+                        'fadeIn': 'fadeIn 0.3s ease-out',
+                    },
+                    keyframes: {
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                },
+            },
+        };
+    </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --neon-blue: #00f3ff;
-            --neon-purple: #b434eb;
-            --neon-pink: #ff006e;
-            --dark-bg: #0a0e27;
-            --card-bg: #1a1f3a;
-            --success: #00ff88;
-            --warning: #ffaa00;
-            --danger: #ff0055;
-        }
-
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
         body {
-            font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1f3a 100%);
-            color: #ffffff;
-            min-height: 100vh;
-            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #050505;
+            min-height: max(884px, 100dvh);
         }
-
-        /* ========== 電腦版樣式 ========== */
-        @media (min-width: 768px) {
-            .mobile-only { display: none !important; }
-            
-            .container {
-                max-width: 1400px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-
-            header {
-                text-align: center;
-                margin-bottom: 30px;
-                padding: 30px 20px;
-                background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 31, 58, 0.5) 100%);
-                border-radius: 15px;
-                box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
-            }
-
-            h1 {
-                font-size: 2.5em;
-                background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                margin-bottom: 10px;
-                text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
-            }
-
-            .main-content {
-                display: grid;
-                grid-template-columns: 450px 1fr;
-                gap: 20px;
-                margin-bottom: 20px;
-            }
-
-            .stats-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 15px;
-                margin-bottom: 20px;
-            }
-
-            .export-actions {
-                display: flex;
-                gap: 10px;
-                margin-top: 20px;
-            }
+        .text-gold-gradient {
+            background: linear-gradient(to bottom, #F3E5AB, #D4AF37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-
-        /* ========== 手機版樣式 ========== */
-        @media (max-width: 767px) {
-            .desktop-only { display: none !important; }
-            
-            body {
-                padding-bottom: 70px;
-            }
-
-            .container {
-                padding: 0;
-            }
-
-            header {
-                padding: 15px;
-                background: var(--card-bg);
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-                position: sticky;
-                top: 0;
-                z-index: 100;
-            }
-
-            h1 {
-                font-size: 1.3em;
-                background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-
-            .subtitle {
-                font-size: 0.8em;
-                opacity: 0.7;
-            }
-
-            .main-content {
-                display: block;
-            }
-
-            .bottom-nav {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: var(--card-bg);
-                border-top: 2px solid var(--neon-blue);
-                display: flex;
-                justify-content: space-around;
-                padding: 8px 0;
-                box-shadow: 0 -5px 20px rgba(0, 243, 255, 0.3);
-                z-index: 1000;
-            }
-
-            .nav-item {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 5px;
-                cursor: pointer;
-                transition: all 0.3s;
-                border: none;
-                background: transparent;
-                color: #888;
-            }
-
-            .nav-item.active {
-                color: var(--neon-blue);
-            }
-
-            .nav-icon {
-                font-size: 1.5em;
-                margin-bottom: 3px;
-            }
-
-            .nav-label {
-                font-size: 0.7em;
-            }
-
-            .page-content {
-                display: none;
-                padding: 15px;
-                animation: fadeIn 0.3s;
-            }
-
-            .page-content.active {
-                display: block;
-            }
-
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-
-            .stats-grid {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-                margin-bottom: 15px;
-            }
+        .border-gold-gradient {
+            border-image: linear-gradient(to bottom, #D4AF37, #8A6E28) 1;
         }
-
-        /* ========== 共用樣式 ========== */
-        .card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(0, 243, 255, 0.2);
+        .glass-panel {
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
-
-        @media (max-width: 767px) {
-            .card {
-                padding: 15px;
-                border-radius: 10px;
-            }
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 20px);
         }
-
-        .card-title {
-            font-size: 1.3em;
-            margin-bottom: 15px;
-            color: var(--neon-blue);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        @media (max-width: 767px) {
-            .card-title {
-                font-size: 1.1em;
-                margin-bottom: 12px;
-            }
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--neon-blue);
-            font-size: 0.9em;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 8px;
-            color: #ffffff;
-            font-size: 1em;
-            transition: all 0.3s;
-        }
-
-        @media (max-width: 767px) {
-            input, select, textarea {
-                padding: 14px;
-                font-size: 16px;
-            }
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: all 0.3s;
-            font-weight: bold;
-        }
-
-        @media (max-width: 767px) {
-            .btn {
-                padding: 14px 20px;
-                width: 100%;
-                margin-bottom: 10px;
-            }
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-            color: white;
-            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(0, 243, 255, 0.6);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid var(--neon-blue);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(180, 52, 235, 0.1));
-            border-radius: 10px;
-            padding: 15px;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            text-align: center;
-        }
-
-        @media (max-width: 767px) {
-            .stat-card {
-                padding: 12px;
-            }
-        }
-
-        .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: var(--neon-blue);
-            margin-bottom: 5px;
-        }
-
-        @media (max-width: 767px) {
-            .stat-number {
-                font-size: 1.5em;
-            }
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            opacity: 0.8;
-        }
-
-        @media (max-width: 767px) {
-            .stat-label {
-                font-size: 0.8em;
-            }
-        }
-
-        .filter-section {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        @media (max-width: 767px) {
-            .filter-section {
-                flex-direction: column;
-            }
-        }
-
-        .filter-section input,
-        .filter-section select {
-            flex: 1;
-            min-width: 150px;
-        }
-
-        @media (max-width: 767px) {
-            .filter-section input,
-            .filter-section select {
-                min-width: 100%;
-            }
-        }
-
-        .doc-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-left: 4px solid var(--neon-blue);
-            transition: all 0.3s;
-        }
-
-        @media (max-width: 767px) {
-            .doc-item {
-                padding: 12px;
-            }
-        }
-
-        .doc-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateX(5px);
-        }
-
-        .doc-number {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: var(--neon-blue);
-            margin-bottom: 8px;
-        }
-
-        .doc-info {
-            font-size: 0.9em;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-
-        .doc-actions {
-            display: flex;
-            gap: 5px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        @media (max-width: 767px) {
-            .doc-actions .btn {
-                flex: 1;
-                min-width: 45%;
-                padding: 10px;
-                font-size: 0.85em;
-            }
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: bold;
-        }
-
-        .status-temp {
-            background: var(--warning);
-            color: var(--dark-bg);
-        }
-
-        .status-complete {
-            background: var(--success);
-            color: var(--dark-bg);
-        }
-
-        .file-upload-area {
-            border: 2px dashed rgba(0, 243, 255, 0.3);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        @media (max-width: 767px) {
-            .file-upload-area {
-                padding: 15px;
-            }
-        }
-
-        .file-upload-area.drag-over {
-            border-color: var(--neon-blue);
-            background: rgba(0, 243, 255, 0.1);
-        }
-
-        .file-list {
-            margin-top: 10px;
-        }
-
-        .file-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 2px solid var(--neon-blue);
-        }
-
-        @media (max-width: 767px) {
-            .modal-content {
-                padding: 20px;
-                max-width: 95%;
-            }
-        }
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            background: var(--success);
-            color: var(--dark-bg);
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            z-index: 3000;
-            animation: slideIn 0.3s, slideOut 0.3s 2.7s;
-            font-weight: bold;
-        }
-
-        @media (max-width: 767px) {
-            .toast {
-                top: auto;
-                bottom: 80px;
-                left: 20px;
-                right: 20px;
-            }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(400px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(400px); opacity: 0; }
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            opacity: 0.6;
-        }
-
-        @media (max-width: 767px) {
-            .empty-state {
-                padding: 30px 20px;
-            }
-        }
-
-        .empty-state-icon {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-
-        .input-mode-toggle {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .toggle-btn {
-            flex: 1;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 5px;
-            color: #888;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .toggle-btn.active {
-            background: var(--neon-blue);
-            color: var(--dark-bg);
-            border-color: var(--neon-blue);
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>📄 發文管理系統</h1>
-            <div class="subtitle">Document Management System V1.1</div>
-        </header>
+<body class="bg-glam-dark bg-luxury-gradient text-gray-200 font-sans min-h-screen flex flex-col antialiased selection:bg-glam-gold-400 selection:text-black">
+    
+    <!-- 背景裝飾 -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-glam-gold-400/5 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-900/10 rounded-full blur-[120px]"></div>
+        <div class="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-glam-gold-400/5 rounded-full blur-[80px]"></div>
+    </div>
 
-        <!-- ========== 電腦版 ========== -->
-        <div class="main-content desktop-only">
-            <!-- 左側：新增區 -->
-            <div class="card">
-                <div class="card-title">
-                    <span>✨</span>
-                    <span>新增發文字號</span>
+    <!-- Header -->
+    <header class="pt-14 pb-6 px-5 sticky top-0 z-30 glass-panel border-b border-white/5 transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-4">
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-glam-gold-300 to-glam-gold-600 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-1000"></div>
+                    <div class="relative w-12 h-12 rounded-full bg-gradient-to-b from-[#333] to-[#111] border border-glam-gold-500/30 flex items-center justify-center shadow-lg">
+                        <span class="material-icons-round text-glam-gold-200 text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">article</span>
+                    </div>
                 </div>
-                <form id="docForm">
-                    <div class="input-mode-toggle">
-                        <button type="button" class="toggle-btn active" onclick="switchInputMode('select')">選擇公司</button>
-                        <button type="button" class="toggle-btn" onclick="switchInputMode('custom')">自訂代碼</button>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-wide font-display text-gold-gradient drop-shadow-sm">GOLDEN DMS</h1>
+                    <div class="flex items-center gap-2">
+                        <span class="h-[1px] w-4 bg-glam-gold-500/50"></span>
+                        <p class="text-[10px] text-glam-gold-300/70 uppercase tracking-[0.25em] font-serif">發文管理系統</p>
                     </div>
-
-                    <div id="selectMode">
-                        <div class="form-group">
-                            <label>公司名稱</label>
-                            <select id="companySelect">
-                                <option value="">請選擇公司</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div id="customMode" style="display: none;">
-                        <div class="form-group">
-                            <label>公司代碼（自訂）</label>
-                            <input type="text" id="customCompanyCode" placeholder="例如：昊陽" maxlength="10">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>部門代碼</label>
-                        <select id="deptCode" required>
-                            <option value="">請選擇部門</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>主旨</label>
-                        <input type="text" id="subject" placeholder="請輸入文件主旨">
-                    </div>
-
-                    <div class="form-group">
-                        <label>受文者</label>
-                        <input type="text" id="recipient" placeholder="請輸入受文者">
-                    </div>
-
-                    <div class="form-group">
-                        <label>檔案上傳（選填）</label>
-                        <div class="file-upload-area" id="fileUploadArea">
-                            <div>📁 點擊或拖曳檔案至此</div>
-                            <div style="font-size: 0.8em; margin-top: 5px; opacity: 0.6;">
-                                支援 PDF、Word、Excel、圖片等格式，單檔最大 10MB
-                            </div>
-                        </div>
-                        <input type="file" id="fileInput" style="display: none;" multiple>
-                        <div class="file-list" id="fileList"></div>
-                    </div>
-
-                    <div style="display: flex; gap: 10px;">
-                        <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="generateTempNumber()">
-                            產生臨時號碼
-                        </button>
-                        <button type="submit" class="btn btn-primary" style="flex: 1;">
-                            完整建檔
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
+            <button onclick="showStats()" class="relative w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group overflow-hidden">
+                <div class="absolute inset-0 bg-glam-gold-400/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                <span class="material-icons-round text-glam-gold-200 group-hover:text-white transition-colors">bar_chart</span>
+            </button>
+        </div>
+        
+        <!-- 搜尋框 -->
+        <div class="relative group mt-2">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-glam-gold-600 via-glam-gold-300 to-glam-gold-600 rounded-xl opacity-30 group-focus-within:opacity-100 transition duration-500 blur-sm"></div>
+            <div class="relative flex items-center bg-[#0F0F0F] rounded-xl border border-white/10 group-focus-within:border-glam-gold-400/50 shadow-inner transition-all">
+                <span class="pl-4 flex items-center pointer-events-none">
+                    <span class="material-icons-round text-glam-gold-500/70 group-focus-within:text-glam-gold-300 transition-colors">search</span>
+                </span>
+                <input id="searchInput" class="block w-full pl-3 pr-4 py-3 bg-transparent border-none text-glam-gold-100 placeholder-white/20 focus:ring-0 text-sm tracking-wide font-light" placeholder="搜尋文號、主旨、受文者..." type="text" oninput="filterDocuments()"/>
+            </div>
+        </div>
+    </header>
 
-            <!-- 右側：管理區 -->
-            <div>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalCount">0</div>
-                        <div class="stat-label">總文號數</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="completeCount">0</div>
-                        <div class="stat-label">已完成</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="tempCount">0</div>
-                        <div class="stat-label">臨時號碼</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="todayCount">0</div>
-                        <div class="stat-label">今日新增</div>
-                    </div>
-                </div>
+    <!-- Main Content -->
+    <main class="flex-1 px-4 py-6 overflow-y-auto pb-32 relative z-10" id="mainContent">
+        
+        <!-- 篩選按鈕 -->
+        <div class="flex gap-3 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+            <button onclick="setFilter('all')" id="filter-all" class="flex-shrink-0 px-4 py-2 bg-gradient-to-r from-glam-gold-500 to-glam-gold-700 text-black font-bold text-xs rounded-lg shadow-[0_4px_12px_rgba(212,175,55,0.3)] border border-glam-gold-300/50 flex items-center gap-1">
+                <span class="material-icons-round text-sm">filter_list</span>
+                <span>全部文件</span>
+            </button>
+            <button onclick="setFilter('temp')" id="filter-temp" class="flex-shrink-0 px-4 py-2 bg-white/5 text-glam-gold-200 border border-white/10 hover:border-glam-gold-500/50 rounded-lg text-xs font-medium tracking-wide transition-all hover:bg-white/10">
+                臨時號碼 (<span id="tempCount">0</span>)
+            </button>
+            <button onclick="setFilter('complete')" id="filter-complete" class="flex-shrink-0 px-4 py-2 bg-white/5 text-gray-400 border border-white/10 hover:border-glam-gold-500/50 rounded-lg text-xs font-medium tracking-wide transition-all hover:bg-white/10">
+                已完成
+            </button>
+        </div>
 
-                <div class="card">
-                    <div class="card-title">
-                        <span>📋</span>
-                        <span>文號管理</span>
-                    </div>
-
-                    <div class="filter-section">
-                        <input type="text" id="searchInput" placeholder="🔍 搜尋文號、主旨、受文者...">
-                        <select id="filterCompany" onchange="filterDocuments()">
-                            <option value="">所有公司</option>
-                        </select>
-                        <select id="filterStatus" onchange="filterDocuments()">
-                            <option value="">所有狀態</option>
-                            <option value="complete">已完成</option>
-                            <option value="temp">臨時號碼</option>
-                        </select>
-                    </div>
-
-                    <div id="docList"></div>
-                </div>
-
-                <div class="export-actions">
-                    <button class="btn btn-secondary" onclick="exportToCSV()">📊 匯出 CSV</button>
-                    <button class="btn btn-danger" onclick="confirmClearAll()">🗑️ 清空所有資料</button>
-                </div>
+        <!-- 統計卡片 (隱藏) -->
+        <div id="statsPanel" class="hidden mb-6 grid grid-cols-2 gap-3 animate-fadeIn">
+            <div class="bg-[#161616] rounded-xl p-4 border border-white/5 shadow-card-emboss">
+                <div class="text-3xl font-bold text-gold-gradient mb-1" id="totalCountDisplay">0</div>
+                <div class="text-xs text-white/40 uppercase tracking-wider">總文號數</div>
+            </div>
+            <div class="bg-[#161616] rounded-xl p-4 border border-white/5 shadow-card-emboss">
+                <div class="text-3xl font-bold text-green-400 mb-1" id="completeCountDisplay">0</div>
+                <div class="text-xs text-white/40 uppercase tracking-wider">已完成</div>
+            </div>
+            <div class="bg-[#161616] rounded-xl p-4 border border-white/5 shadow-card-emboss">
+                <div class="text-3xl font-bold text-glam-gold-400 mb-1" id="tempCountDisplay">0</div>
+                <div class="text-xs text-white/40 uppercase tracking-wider">臨時號碼</div>
+            </div>
+            <div class="bg-[#161616] rounded-xl p-4 border border-white/5 shadow-card-emboss">
+                <div class="text-3xl font-bold text-blue-400 mb-1" id="todayCountDisplay">0</div>
+                <div class="text-xs text-white/40 uppercase tracking-wider">今日新增</div>
             </div>
         </div>
 
-        <!-- ========== 手機版 ========== -->
-        <div class="mobile-only">
-            <!-- 新增頁面 -->
-            <div class="page-content active" id="page-add">
-                <div class="card">
-                    <div class="card-title">
-                        <span>✨</span>
-                        <span>新增發文字號</span>
+        <!-- 文件列表標題 -->
+        <div class="flex items-center justify-between mb-6 px-1">
+            <h2 class="text-xl font-display text-white flex items-center gap-3">
+                <span class="material-icons-round text-glam-gold-400 text-lg">stars</span>
+                <span class="text-gold-gradient font-bold tracking-wider">文件列表</span>
+            </h2>
+            <span class="text-[10px] font-serif italic text-white/30 border-b border-white/10 pb-0.5">Royal Edition</span>
+        </div>
+
+        <!-- 文件列表 -->
+        <div id="docList" class="space-y-6">
+            <!-- 文件卡片將在這裡動態生成 -->
+        </div>
+
+        <!-- 空狀態 -->
+        <div id="emptyState" class="hidden text-center py-20">
+            <span class="material-icons-round text-6xl text-white/10 mb-4">inbox</span>
+            <p class="text-white/30 text-sm font-serif">目前沒有文號資料</p>
+        </div>
+    </main>
+
+    <!-- 底部導航 -->
+    <nav class="fixed bottom-0 w-full glass-panel border-t border-white/10 z-40 pb-safe shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-glam-gold-400 to-transparent shadow-[0_0_10px_#D4AF37]"></div>
+        <div class="flex justify-around items-center h-16 px-2">
+            <button onclick="switchPage('manage')" id="nav-manage" class="flex flex-col items-center justify-center w-full h-full space-y-1 text-gray-500 hover:text-glam-gold-200 transition-colors group">
+                <span class="material-icons-round text-2xl group-hover:scale-110 transition-transform duration-300">assignment</span>
+                <span class="text-[9px] font-medium tracking-widest uppercase">管理</span>
+            </button>
+            <button onclick="switchPage('add')" id="nav-add" class="relative -top-5">
+                <div class="absolute inset-0 bg-glam-gold-400/20 blur-xl rounded-full"></div>
+                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-glam-gold-300 to-glam-gold-600 flex items-center justify-center shadow-[0_4px_10px_rgba(212,175,55,0.4)] border border-glam-gold-200/50 relative z-10">
+                    <span class="material-icons-round text-3xl text-black drop-shadow-sm">add_circle</span>
+                </div>
+                <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[9px] font-bold text-glam-gold-300 tracking-widest uppercase whitespace-nowrap">新增</span>
+            </button>
+            <button onclick="switchPage('settings')" id="nav-settings" class="flex flex-col items-center justify-center w-full h-full space-y-1 text-gray-500 hover:text-glam-gold-200 transition-colors group">
+                <span class="material-icons-round text-2xl group-hover:scale-110 transition-transform duration-300">settings</span>
+                <span class="text-[9px] font-medium tracking-widest uppercase">設定</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 新增文號 Modal -->
+    <div id="addModal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-overlay">
+        <div class="flex min-h-full items-end justify-center p-4">
+            <div class="relative w-full max-w-lg transform transition-all animate-fadeIn">
+                <div class="bg-[#121212] rounded-t-3xl border border-white/10 shadow-2xl">
+                    <!-- Modal Header -->
+                    <div class="bg-gradient-to-r from-glam-gold-900/40 to-transparent px-6 py-4 border-b border-white/5 flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <span class="material-icons-round text-glam-gold-400">add_circle</span>
+                            <h3 class="text-lg font-display text-gold-gradient font-bold tracking-wider">新增發文字號</h3>
+                        </div>
+                        <button onclick="closeAddModal()" class="text-white/50 hover:text-white transition-colors">
+                            <span class="material-icons-round">close</span>
+                        </button>
                     </div>
-                    <form id="docFormMobile">
-                        <div class="input-mode-toggle">
-                            <button type="button" class="toggle-btn active" onclick="switchInputModeMobile('select')">選擇公司</button>
-                            <button type="button" class="toggle-btn" onclick="switchInputModeMobile('custom')">自訂代碼</button>
+
+                    <!-- Modal Body -->
+                    <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                        <!-- 公司選擇模式切換 -->
+                        <div class="flex gap-2">
+                            <button onclick="switchInputModeModal('select')" id="toggle-select" class="flex-1 py-2 px-4 bg-gradient-to-r from-glam-gold-500 to-glam-gold-700 text-black font-bold text-xs rounded-lg border border-glam-gold-300/50">
+                                選擇公司
+                            </button>
+                            <button onclick="switchInputModeModal('custom')" id="toggle-custom" class="flex-1 py-2 px-4 bg-white/5 text-glam-gold-200 border border-white/10 rounded-lg text-xs font-medium">
+                                自訂代碼
+                            </button>
                         </div>
 
-                        <div id="selectModeMobile">
-                            <div class="form-group">
-                                <label>公司名稱</label>
-                                <select id="companySelectMobile">
-                                    <option value="">請選擇公司</option>
-                                </select>
-                            </div>
+                        <!-- 選擇模式 -->
+                        <div id="selectModeModal">
+                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">公司名稱</label>
+                            <select id="companySelectModal" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all">
+                                <option value="">請選擇公司</option>
+                            </select>
                         </div>
 
-                        <div id="customModeMobile" style="display: none;">
-                            <div class="form-group">
-                                <label>公司代碼（自訂）</label>
-                                <input type="text" id="customCompanyCodeMobile" placeholder="例如：昊陽" maxlength="10">
-                            </div>
+                        <!-- 自訂模式 -->
+                        <div id="customModeModal" class="hidden">
+                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">公司代碼（自訂）</label>
+                            <input type="text" id="customCompanyCodeModal" placeholder="例如：昊陽" maxlength="10" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all placeholder-white/20">
                         </div>
 
-                        <div class="form-group">
-                            <label>部門代碼</label>
-                            <select id="deptCodeMobile" required>
+                        <!-- 部門代碼 -->
+                        <div>
+                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">部門代碼</label>
+                            <select id="deptCodeModal" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all" required>
                                 <option value="">請選擇部門</option>
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label>主旨</label>
-                            <input type="text" id="subjectMobile" placeholder="請輸入文件主旨">
+                        <!-- 發文日期 -->
+                        <div>
+                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">發文日期</label>
+                            <input type="date" id="docDateModal" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all" required>
+                            <p class="text-[10px] text-white/30 mt-2">💡 此日期將影響文號的日期部分</p>
                         </div>
 
-                        <div class="form-group">
-                            <label>受文者</label>
-                            <input type="text" id="recipientMobile" placeholder="請輸入受文者">
+                        <!-- 主旨 -->
+                        <div>
+                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">主旨</label>
+                            <input type="text" id="subjectModal" placeholder="請輸入文件主旨" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all placeholder-white/20">
                         </div>
 
-                        <div class="form-group">
-                            <label>檔案上傳（選填）</label>
-                            <div class="file-upload-area" id="fileUploadAreaMobile">
-                                <div>📁 點擊選擇檔案</div>
-                                <div style="font-size: 0.8em; margin-top: 5px; opacity: 0.6;">
-                                    最大 10MB
-                                </div>
+                        <!-- 受文者 -->
+                        <div>
+                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">受文者</label>
+                            <input type="text" id="recipientModal" placeholder="請輸入受文者" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all placeholder-white/20">
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="p-6 pt-0 grid grid-cols-2 gap-3">
+                        <button onclick="generateTempNumberModal()" class="py-3 bg-white/5 hover:bg-white/10 text-glam-gold-200 border border-white/10 hover:border-glam-gold-500/30 rounded-lg text-sm font-bold tracking-wide transition-all flex items-center justify-center gap-2">
+                            <span class="material-icons-round text-sm">schedule</span>
+                            <span>臨時號碼</span>
+                        </button>
+                        <button onclick="submitDocModal()" class="relative overflow-hidden group/btn rounded-lg">
+                            <div class="absolute inset-0 bg-gold-plate"></div>
+                            <div class="absolute inset-0 bg-white/20 opacity-0 group-hover/btn:opacity-100 transition-opacity"></div>
+                            <div class="relative py-3 flex items-center justify-center gap-2 text-black font-bold text-sm tracking-wide">
+                                <span class="material-icons-round text-sm">check_circle</span>
+                                <span>完整建檔</span>
                             </div>
-                            <input type="file" id="fileInputMobile" style="display: none;" multiple>
-                            <div class="file-list" id="fileListMobile"></div>
-                        </div>
-
-                        <button type="button" class="btn btn-secondary" onclick="generateTempNumberMobile()">
-                            產生臨時號碼
                         </button>
-                        <button type="submit" class="btn btn-primary">
-                            完整建檔
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- 管理頁面 -->
-            <div class="page-content" id="page-manage">
-                <div class="card">
-                    <div class="card-title">
-                        <span>📋</span>
-                        <span>文號管理</span>
-                    </div>
-
-                    <div class="filter-section">
-                        <input type="text" id="searchInputMobile" placeholder="🔍 搜尋...">
-                        <select id="filterCompanyMobile" onchange="filterDocumentsMobile()">
-                            <option value="">所有公司</option>
-                        </select>
-                        <select id="filterStatusMobile" onchange="filterDocumentsMobile()">
-                            <option value="">所有狀態</option>
-                            <option value="complete">已完成</option>
-                            <option value="temp">臨時號碼</option>
-                        </select>
-                    </div>
-
-                    <div id="docListMobile"></div>
-                </div>
-            </div>
-
-            <!-- 統計頁面 -->
-            <div class="page-content" id="page-stats">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalCountMobile">0</div>
-                        <div class="stat-label">總文號數</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="completeCountMobile">0</div>
-                        <div class="stat-label">已完成</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="tempCountMobile">0</div>
-                        <div class="stat-label">臨時號碼</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="todayCountMobile">0</div>
-                        <div class="stat-label">今日新增</div>
                     </div>
                 </div>
-
-                <div class="card" style="margin-top: 15px;">
-                    <div class="card-title">
-                        <span>📈</span>
-                        <span>使用統計</span>
-                    </div>
-                    <div id="detailedStatsMobile"></div>
-                </div>
-            </div>
-
-            <!-- 設定頁面 -->
-            <div class="page-content" id="page-settings">
-                <div class="card">
-                    <div class="card-title">
-                        <span>⚙️</span>
-                        <span>系統設定</span>
-                    </div>
-
-                    <h3 style="margin-bottom: 15px; color: var(--neon-blue);">資料管理</h3>
-                    <button class="btn btn-secondary" onclick="exportToCSV()">
-                        📊 匯出 CSV 檔案
-                    </button>
-                    <button class="btn btn-danger" onclick="confirmClearAll()">
-                        🗑️ 清空所有資料
-                    </button>
-
-                    <h3 style="margin: 20px 0 15px; color: var(--neon-blue);">關於系統</h3>
-                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; line-height: 1.6;">
-                        <p><strong>系統版本：</strong>V1.1</p>
-                        <p><strong>更新內容：</strong>新增「字」、更新公司與部門代碼</p>
-                        <p><strong>儲存方式：</strong>瀏覽器本地儲存</p>
-                        <p><strong>資料同步：</strong>需使用相同瀏覽器</p>
-                        <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.7;">
-                            所有資料儲存在您的裝置上，不會上傳至伺服器
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 底部導航 -->
-            <div class="bottom-nav">
-                <button class="nav-item active" onclick="switchPage('add')">
-                    <div class="nav-icon">✨</div>
-                    <div class="nav-label">新增</div>
-                </button>
-                <button class="nav-item" onclick="switchPage('manage')">
-                    <div class="nav-icon">📋</div>
-                    <div class="nav-label">管理</div>
-                </button>
-                <button class="nav-item" onclick="switchPage('stats')">
-                    <div class="nav-icon">📊</div>
-                    <div class="nav-label">統計</div>
-                </button>
-                <button class="nav-item" onclick="switchPage('settings')">
-                    <div class="nav-icon">⚙️</div>
-                    <div class="nav-label">設定</div>
-                </button>
             </div>
         </div>
     </div>
 
     <!-- 編輯 Modal -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <div class="card-title">
-                <span>✏️</span>
-                <span>編輯文號</span>
+    <div id="editModal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-overlay">
+        <div class="flex min-h-full items-end justify-center p-4">
+            <div class="relative w-full max-w-lg transform transition-all animate-fadeIn">
+                <div class="bg-[#121212] rounded-t-3xl border border-white/10 shadow-2xl">
+                    <div class="bg-gradient-to-r from-glam-gold-900/40 to-transparent px-6 py-4 border-b border-white/5 flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <span class="material-icons-round text-glam-gold-400">edit</span>
+                            <h3 class="text-lg font-display text-gold-gradient font-bold tracking-wider">編輯文號</h3>
+                        </div>
+                        <button onclick="closeEditModal()" class="text-white/50 hover:text-white transition-colors">
+                            <span class="material-icons-round">close</span>
+                        </button>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <input type="hidden" id="editDocId">
+                        <div>
+                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">主旨</label>
+                            <input type="text" id="editSubject" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-glam-gold-300 mb-2 font-bold tracking-wider uppercase">受文者</label>
+                            <input type="text" id="editRecipient" class="w-full px-4 py-3 bg-[#0F0F0F] border border-white/10 rounded-lg text-white text-sm focus:border-glam-gold-500/50 focus:ring-0 transition-all">
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 grid grid-cols-2 gap-3">
+                        <button onclick="closeEditModal()" class="py-3 bg-white/5 hover:bg-white/10 text-gray-400 border border-white/10 rounded-lg text-sm font-medium transition-all">
+                            取消
+                        </button>
+                        <button onclick="submitEdit()" class="relative overflow-hidden group/btn rounded-lg">
+                            <div class="absolute inset-0 bg-gold-plate"></div>
+                            <div class="relative py-3 text-black font-bold text-sm tracking-wide">儲存</div>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <form id="editForm">
-                <input type="hidden" id="editDocId">
-                <div class="form-group">
-                    <label>主旨</label>
-                    <input type="text" id="editSubject">
+        </div>
+    </div>
+
+    <!-- 設定頁面 Modal -->
+    <div id="settingsModal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-overlay">
+        <div class="flex min-h-full items-end justify-center p-4">
+            <div class="relative w-full max-w-lg transform transition-all animate-fadeIn">
+                <div class="bg-[#121212] rounded-t-3xl border border-white/10 shadow-2xl">
+                    <div class="bg-gradient-to-r from-glam-gold-900/40 to-transparent px-6 py-4 border-b border-white/5 flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <span class="material-icons-round text-glam-gold-400">settings</span>
+                            <h3 class="text-lg font-display text-gold-gradient font-bold tracking-wider">系統設定</h3>
+                        </div>
+                        <button onclick="closeSettingsModal()" class="text-white/50 hover:text-white transition-colors">
+                            <span class="material-icons-round">close</span>
+                        </button>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div>
+                            <h4 class="text-sm font-bold text-glam-gold-300 mb-4 uppercase tracking-wider">資料管理</h4>
+                            <div class="space-y-3">
+                                <button onclick="exportToCSV()" class="w-full py-3 bg-white/5 hover:bg-white/10 text-glam-gold-200 border border-white/10 hover:border-glam-gold-500/30 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                                    <span class="material-icons-round text-sm">download</span>
+                                    <span>匯出 CSV 檔案</span>
+                                </button>
+                                <button onclick="confirmClearAll()" class="w-full py-3 bg-red-900/10 hover:bg-red-900/20 text-red-400 border border-red-500/20 hover:border-red-500/40 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                                    <span class="material-icons-round text-sm">delete_forever</span>
+                                    <span>清空所有資料</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-[#0F0F0F] rounded-xl p-4 border border-white/5">
+                            <h4 class="text-sm font-bold text-glam-gold-300 mb-3 uppercase tracking-wider">關於系統</h4>
+                            <div class="space-y-2 text-xs text-white/50">
+                                <p><span class="text-glam-gold-400">系統版本：</span>V1.1 Golden Edition</p>
+                                <p><span class="text-glam-gold-400">更新內容：</span>黑金奢華風格、日期選擇</p>
+                                <p><span class="text-glam-gold-400">儲存方式：</span>瀏覽器本地儲存</p>
+                                <p class="text-[10px] text-white/30 mt-3">所有資料儲存在您的裝置上，不會上傳至伺服器</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>受文者</label>
-                    <input type="text" id="editRecipient">
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeEditModal()">取消</button>
-                    <button type="submit" class="btn btn-primary" style="flex: 1;">儲存</button>
-                </div>
-            </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div id="toast" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-50 animate-fadeIn">
+        <div class="bg-[#1a1a1a] border border-glam-gold-500/30 rounded-xl px-6 py-3 shadow-2xl flex items-center gap-3">
+            <span class="material-icons-round text-glam-gold-400 text-lg">check_circle</span>
+            <span id="toastMessage" class="text-sm text-white font-medium"></span>
         </div>
     </div>
 
     <script>
-        // ========== 公司與部門資料（已更新）==========
+        // ========== 資料結構 ==========
         const COMPANIES = [
             { code: "軒能源", name: "宇軒能源科技股份有限公司" },
             { code: "宇軒", name: "宇軒綠能股份有限公司" },
@@ -971,186 +477,131 @@
         ];
 
         let documents = [];
-        let selectedFiles = [];
-        let selectedFilesMobile = [];
+        let currentFilter = 'all';
         let currentInputMode = 'select';
-        let currentInputModeMobile = 'select';
 
+        // ========== 初始化 ==========
         document.addEventListener('DOMContentLoaded', function() {
             initializeSelects();
+            setDefaultDate();
             loadDocuments();
-            setupFileUpload();
-            setupSearch();
             updateStats();
+            renderDocuments();
         });
 
         function initializeSelects() {
-            const companySelect = document.getElementById('companySelect');
-            const deptSelect = document.getElementById('deptCode');
-            const filterCompany = document.getElementById('filterCompany');
-            const companySelectMobile = document.getElementById('companySelectMobile');
-            const deptSelectMobile = document.getElementById('deptCodeMobile');
-            const filterCompanyMobile = document.getElementById('filterCompanyMobile');
+            const companySelect = document.getElementById('companySelectModal');
+            const deptSelect = document.getElementById('deptCodeModal');
 
             COMPANIES.forEach(company => {
                 companySelect.innerHTML += `<option value="${company.code}">${company.name}</option>`;
-                companySelectMobile.innerHTML += `<option value="${company.code}">${company.name}</option>`;
-                filterCompany.innerHTML += `<option value="${company.code}">${company.code}</option>`;
-                filterCompanyMobile.innerHTML += `<option value="${company.code}">${company.code}</option>`;
             });
 
             DEPARTMENTS.forEach(dept => {
                 deptSelect.innerHTML += `<option value="${dept.code}">${dept.name} (${dept.code})</option>`;
-                deptSelectMobile.innerHTML += `<option value="${dept.code}">${dept.name} (${dept.code})</option>`;
             });
         }
 
-        function switchInputMode(mode) {
+        function setDefaultDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('docDateModal').value = today;
+        }
+
+        // ========== 頁面切換 ==========
+        function switchPage(page) {
+            if (page === 'add') {
+                document.getElementById('addModal').classList.remove('hidden');
+            } else if (page === 'settings') {
+                document.getElementById('settingsModal').classList.remove('hidden');
+            } else if (page === 'manage') {
+                // 已經在管理頁面，不需要做什麼
+            }
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.add('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+        }
+
+        // ========== 輸入模式切換 ==========
+        function switchInputModeModal(mode) {
             currentInputMode = mode;
-            const selectMode = document.getElementById('selectMode');
-            const customMode = document.getElementById('customMode');
-            const toggleBtns = document.querySelectorAll('#docForm .toggle-btn');
+            const selectMode = document.getElementById('selectModeModal');
+            const customMode = document.getElementById('customModeModal');
+            const btnSelect = document.getElementById('toggle-select');
+            const btnCustom = document.getElementById('toggle-custom');
 
             if (mode === 'select') {
-                selectMode.style.display = 'block';
-                customMode.style.display = 'none';
-                toggleBtns[0].classList.add('active');
-                toggleBtns[1].classList.remove('active');
+                selectMode.classList.remove('hidden');
+                customMode.classList.add('hidden');
+                btnSelect.className = 'flex-1 py-2 px-4 bg-gradient-to-r from-glam-gold-500 to-glam-gold-700 text-black font-bold text-xs rounded-lg border border-glam-gold-300/50';
+                btnCustom.className = 'flex-1 py-2 px-4 bg-white/5 text-glam-gold-200 border border-white/10 rounded-lg text-xs font-medium';
             } else {
-                selectMode.style.display = 'none';
-                customMode.style.display = 'block';
-                toggleBtns[0].classList.remove('active');
-                toggleBtns[1].classList.add('active');
+                selectMode.classList.add('hidden');
+                customMode.classList.remove('hidden');
+                btnSelect.className = 'flex-1 py-2 px-4 bg-white/5 text-glam-gold-200 border border-white/10 rounded-lg text-xs font-medium';
+                btnCustom.className = 'flex-1 py-2 px-4 bg-gradient-to-r from-glam-gold-500 to-glam-gold-700 text-black font-bold text-xs rounded-lg border border-glam-gold-300/50';
             }
         }
 
-        function switchInputModeMobile(mode) {
-            currentInputModeMobile = mode;
-            const selectMode = document.getElementById('selectModeMobile');
-            const customMode = document.getElementById('customModeMobile');
-            const toggleBtns = document.querySelectorAll('#docFormMobile .toggle-btn');
-
-            if (mode === 'select') {
-                selectMode.style.display = 'block';
-                customMode.style.display = 'none';
-                toggleBtns[0].classList.add('active');
-                toggleBtns[1].classList.remove('active');
-            } else {
-                selectMode.style.display = 'none';
-                customMode.style.display = 'block';
-                toggleBtns[0].classList.remove('active');
-                toggleBtns[1].classList.add('active');
-            }
-        }
-
-        function switchPage(pageName) {
-            document.querySelectorAll('.page-content').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-
-            document.getElementById(`page-${pageName}`).classList.add('active');
-            const navItems = document.querySelectorAll('.nav-item');
-            const pageIndex = { 'add': 0, 'manage': 1, 'stats': 2, 'settings': 3 };
-            navItems[pageIndex[pageName]].classList.add('active');
-
-            if (pageName === 'manage') {
-                renderDocumentsMobile();
-            }
-            if (pageName === 'stats') {
-                updateStatsMobile();
-            }
-        }
-
-        // ========== 文號生成（已加入「字」）==========
+        // ========== 文號生成 ==========
         function generateDocNumber(isTemp = false) {
-            const now = new Date();
-            const rocYear = now.getFullYear() - 1911;
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
+            const dateInput = document.getElementById('docDateModal').value;
+            if (!dateInput) {
+                showToast('請選擇發文日期', 'warning');
+                return null;
+            }
+            
+            const selectedDate = new Date(dateInput);
+            const rocYear = selectedDate.getFullYear() - 1911;
+            const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+            const day = String(selectedDate.getDate()).padStart(2, '0');
 
             let companyCode;
             if (currentInputMode === 'select') {
-                companyCode = document.getElementById('companySelect').value;
+                companyCode = document.getElementById('companySelectModal').value;
             } else {
-                companyCode = document.getElementById('customCompanyCode').value.trim();
+                companyCode = document.getElementById('customCompanyCodeModal').value.trim();
             }
 
-            const deptCode = document.getElementById('deptCode').value;
+            const deptCode = document.getElementById('deptCodeModal').value;
 
             if (!companyCode || !deptCode) {
                 showToast('請選擇公司和部門', 'warning');
                 return null;
             }
 
-            const todayDocs = documents.filter(doc => {
+            const currentDateStr = `${rocYear}${month}${day}`;
+            const sameDayDocs = documents.filter(doc => {
                 const docDate = doc.docNumber.match(/第(\d{7})/);
                 if (!docDate) return false;
                 const docDateStr = docDate[1];
-                const currentDateStr = `${rocYear}${month}${day}`;
                 return doc.companyCode === companyCode && 
                        doc.deptCode === deptCode && 
                        docDateStr === currentDateStr;
             });
 
-            const serial = String(todayDocs.length + 1).padStart(4, '0');
-            // 新格式：公司代碼 + 部門代碼 + 字 + 第 + 日期 + 流水號 + 號
+            const serial = String(sameDayDocs.length + 1).padStart(4, '0');
             const docNumber = `${companyCode}${deptCode}字第${rocYear}${month}${day}${serial}號`;
 
             return {
                 docNumber,
                 companyCode,
                 deptCode,
-                date: now.toISOString(),
+                date: selectedDate.toISOString(),
                 status: isTemp ? 'temp' : 'complete'
             };
         }
 
-        function generateDocNumberMobile(isTemp = false) {
-            const now = new Date();
-            const rocYear = now.getFullYear() - 1911;
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-
-            let companyCode;
-            if (currentInputModeMobile === 'select') {
-                companyCode = document.getElementById('companySelectMobile').value;
-            } else {
-                companyCode = document.getElementById('customCompanyCodeMobile').value.trim();
-            }
-
-            const deptCode = document.getElementById('deptCodeMobile').value;
-
-            if (!companyCode || !deptCode) {
-                showToast('請選擇公司和部門', 'warning');
-                return null;
-            }
-
-            const todayDocs = documents.filter(doc => {
-                const docDate = doc.docNumber.match(/第(\d{7})/);
-                if (!docDate) return false;
-                const docDateStr = docDate[1];
-                const currentDateStr = `${rocYear}${month}${day}`;
-                return doc.companyCode === companyCode && 
-                       doc.deptCode === deptCode && 
-                       docDateStr === currentDateStr;
-            });
-
-            const serial = String(todayDocs.length + 1).padStart(4, '0');
-            const docNumber = `${companyCode}${deptCode}字第${rocYear}${month}${day}${serial}號`;
-
-            return {
-                docNumber,
-                companyCode,
-                deptCode,
-                date: now.toISOString(),
-                status: isTemp ? 'temp' : 'complete'
-            };
-        }
-
-        function generateTempNumber() {
+        // ========== 臨時號碼 ==========
+        function generateTempNumberModal() {
             const docInfo = generateDocNumber(true);
             if (!docInfo) return;
 
@@ -1158,407 +609,56 @@
                 id: Date.now(),
                 ...docInfo,
                 subject: '',
-                recipient: '',
-                files: []
+                recipient: ''
             };
 
             documents.unshift(newDoc);
             saveDocuments();
             renderDocuments();
             updateStats();
-            showToast(`✅ 已產生臨時號碼：${docInfo.docNumber}`);
-
-            document.getElementById('docForm').reset();
-            if (currentInputMode === 'custom') {
-                document.getElementById('customCompanyCode').value = '';
-            }
+            closeAddModal();
+            showToast(`✨ 已產生臨時號碼：${docInfo.docNumber}`);
         }
 
-        function generateTempNumberMobile() {
-            const docInfo = generateDocNumberMobile(true);
-            if (!docInfo) return;
-
-            const newDoc = {
-                id: Date.now(),
-                ...docInfo,
-                subject: '',
-                recipient: '',
-                files: []
-            };
-
-            documents.unshift(newDoc);
-            saveDocuments();
-            renderDocumentsMobile();
-            updateStatsMobile();
-            showToast(`✅ 已產生臨時號碼：${docInfo.docNumber}`);
-
-            document.getElementById('docFormMobile').reset();
-            if (currentInputModeMobile === 'custom') {
-                document.getElementById('customCompanyCodeMobile').value = '';
-            }
-            selectedFilesMobile = [];
-            renderFileListMobile();
-        }
-
-        document.getElementById('docForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
+        // ========== 完整建檔 ==========
+        function submitDocModal() {
             const docInfo = generateDocNumber(false);
             if (!docInfo) return;
 
-            const subject = document.getElementById('subject').value.trim();
-            const recipient = document.getElementById('recipient').value.trim();
+            const subject = document.getElementById('subjectModal').value.trim();
+            const recipient = document.getElementById('recipientModal').value.trim();
 
             const newDoc = {
                 id: Date.now(),
                 ...docInfo,
                 subject,
-                recipient,
-                files: selectedFiles.map(f => ({
-                    name: f.name,
-                    size: f.size,
-                    type: f.type,
-                    data: f.data
-                }))
+                recipient
             };
 
             documents.unshift(newDoc);
             saveDocuments();
             renderDocuments();
             updateStats();
+            closeAddModal();
             showToast(`✅ 已建立文號：${docInfo.docNumber}`);
 
-            this.reset();
-            selectedFiles = [];
-            renderFileList();
-            if (currentInputMode === 'custom') {
-                document.getElementById('customCompanyCode').value = '';
-            }
-        });
-
-        document.getElementById('docFormMobile').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const docInfo = generateDocNumberMobile(false);
-            if (!docInfo) return;
-
-            const subject = document.getElementById('subjectMobile').value.trim();
-            const recipient = document.getElementById('recipientMobile').value.trim();
-
-            const newDoc = {
-                id: Date.now(),
-                ...docInfo,
-                subject,
-                recipient,
-                files: selectedFilesMobile.map(f => ({
-                    name: f.name,
-                    size: f.size,
-                    type: f.type,
-                    data: f.data
-                }))
-            };
-
-            documents.unshift(newDoc);
-            saveDocuments();
-            renderDocumentsMobile();
-            updateStatsMobile();
-            showToast(`✅ 已建立文號：${docInfo.docNumber}`);
-
-            this.reset();
-            selectedFilesMobile = [];
-            renderFileListMobile();
-            if (currentInputModeMobile === 'custom') {
-                document.getElementById('customCompanyCodeMobile').value = '';
-            }
-        });
-
-        function setupFileUpload() {
-            const fileUploadArea = document.getElementById('fileUploadArea');
-            const fileInput = document.getElementById('fileInput');
-
-            fileUploadArea.addEventListener('click', () => fileInput.click());
-            fileUploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                fileUploadArea.classList.add('drag-over');
-            });
-            fileUploadArea.addEventListener('dragleave', () => {
-                fileUploadArea.classList.remove('drag-over');
-            });
-            fileUploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                fileUploadArea.classList.remove('drag-over');
-                handleFiles(e.dataTransfer.files);
-            });
-            fileInput.addEventListener('change', (e) => {
-                handleFiles(e.target.files);
-            });
-
-            const fileUploadAreaMobile = document.getElementById('fileUploadAreaMobile');
-            const fileInputMobile = document.getElementById('fileInputMobile');
-            fileUploadAreaMobile.addEventListener('click', () => fileInputMobile.click());
-            fileInputMobile.addEventListener('change', (e) => {
-                handleFilesMobile(e.target.files);
-            });
+            // 清空表單
+            document.getElementById('subjectModal').value = '';
+            document.getElementById('recipientModal').value = '';
         }
 
-        function handleFiles(files) {
-            Array.from(files).forEach(file => {
-                if (file.size > 10 * 1024 * 1024) {
-                    showToast(`檔案 ${file.name} 超過 10MB`, 'warning');
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    selectedFiles.push({
-                        name: file.name,
-                        size: file.size,
-                        type: file.type,
-                        data: e.target.result
-                    });
-                    renderFileList();
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function handleFilesMobile(files) {
-            Array.from(files).forEach(file => {
-                if (file.size > 10 * 1024 * 1024) {
-                    showToast(`檔案 ${file.name} 超過 10MB`, 'warning');
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    selectedFilesMobile.push({
-                        name: file.name,
-                        size: file.size,
-                        type: file.type,
-                        data: e.target.result
-                    });
-                    renderFileListMobile();
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function renderFileList() {
-            const fileList = document.getElementById('fileList');
-            if (selectedFiles.length === 0) {
-                fileList.innerHTML = '';
-                return;
-            }
-
-            fileList.innerHTML = selectedFiles.map((file, index) => `
-                <div class="file-item">
-                    <div>
-                        <div>${file.name}</div>
-                        <div style="font-size: 0.8em; opacity: 0.6;">${formatFileSize(file.size)}</div>
-                    </div>
-                    <button type="button" class="btn btn-danger" style="padding: 5px 10px;" onclick="removeFile(${index})">
-                        ✕
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        function renderFileListMobile() {
-            const fileList = document.getElementById('fileListMobile');
-            if (selectedFilesMobile.length === 0) {
-                fileList.innerHTML = '';
-                return;
-            }
-
-            fileList.innerHTML = selectedFilesMobile.map((file, index) => `
-                <div class="file-item">
-                    <div>
-                        <div>${file.name}</div>
-                        <div style="font-size: 0.8em; opacity: 0.6;">${formatFileSize(file.size)}</div>
-                    </div>
-                    <button type="button" class="btn btn-danger" style="padding: 5px 10px;" onclick="removeFileMobile(${index})">
-                        ✕
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        function removeFile(index) {
-            selectedFiles.splice(index, 1);
-            renderFileList();
-        }
-
-        function removeFileMobile(index) {
-            selectedFilesMobile.splice(index, 1);
-            renderFileListMobile();
-        }
-
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
-        }
-
-        function renderDocuments() {
-            const docList = document.getElementById('docList');
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const filterCompany = document.getElementById('filterCompany').value;
-            const filterStatus = document.getElementById('filterStatus').value;
-
-            let filtered = documents.filter(doc => {
-                const matchSearch = !searchTerm || 
-                    doc.docNumber.toLowerCase().includes(searchTerm) ||
-                    doc.subject.toLowerCase().includes(searchTerm) ||
-                    doc.recipient.toLowerCase().includes(searchTerm);
-                
-                const matchCompany = !filterCompany || doc.companyCode === filterCompany;
-                const matchStatus = !filterStatus || doc.status === filterStatus;
-
-                return matchSearch && matchCompany && matchStatus;
-            });
-
-            if (filtered.length === 0) {
-                docList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
-                        <div>目前沒有文號資料</div>
-                    </div>
-                `;
-                return;
-            }
-
-            docList.innerHTML = filtered.map(doc => `
-                <div class="doc-item">
-                    <div class="doc-number">${doc.docNumber}</div>
-                    ${doc.subject ? `<div class="doc-info">📝 主旨：${doc.subject}</div>` : ''}
-                    ${doc.recipient ? `<div class="doc-info">👤 受文者：${doc.recipient}</div>` : ''}
-                    <div class="doc-info">
-                        📅 ${new Date(doc.date).toLocaleString('zh-TW')}
-                        <span class="status-badge status-${doc.status}">
-                            ${doc.status === 'temp' ? '臨時號碼' : '已完成'}
-                        </span>
-                    </div>
-                    ${doc.files && doc.files.length > 0 ? `
-                        <div class="doc-info">📎 附件：${doc.files.length} 個檔案</div>
-                    ` : ''}
-                    <div class="doc-actions">
-                        ${doc.status === 'temp' ? `
-                            <button class="btn btn-primary" style="padding: 8px 15px;" onclick="completeDocument(${doc.id})">
-                                完成建檔
-                            </button>
-                        ` : ''}
-                        <button class="btn btn-secondary" style="padding: 8px 15px;" onclick="editDocument(${doc.id})">
-                            ✏️ 編輯
-                        </button>
-                        ${doc.files && doc.files.length > 0 ? `
-                            <button class="btn btn-secondary" style="padding: 8px 15px;" onclick="viewFiles(${doc.id})">
-                                📎 查看附件
-                            </button>
-                        ` : ''}
-                        <button class="btn btn-danger" style="padding: 8px 15px;" onclick="deleteDocument(${doc.id})">
-                            🗑️ 刪除
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderDocumentsMobile() {
-            const docList = document.getElementById('docListMobile');
-            const searchTerm = document.getElementById('searchInputMobile').value.toLowerCase();
-            const filterCompany = document.getElementById('filterCompanyMobile').value;
-            const filterStatus = document.getElementById('filterStatusMobile').value;
-
-            let filtered = documents.filter(doc => {
-                const matchSearch = !searchTerm || 
-                    doc.docNumber.toLowerCase().includes(searchTerm) ||
-                    doc.subject.toLowerCase().includes(searchTerm) ||
-                    doc.recipient.toLowerCase().includes(searchTerm);
-                
-                const matchCompany = !filterCompany || doc.companyCode === filterCompany;
-                const matchStatus = !filterStatus || doc.status === filterStatus;
-
-                return matchSearch && matchCompany && matchStatus;
-            });
-
-            if (filtered.length === 0) {
-                docList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
-                        <div>目前沒有文號資料</div>
-                    </div>
-                `;
-                return;
-            }
-
-            docList.innerHTML = filtered.map(doc => `
-                <div class="doc-item">
-                    <div class="doc-number">${doc.docNumber}</div>
-                    ${doc.subject ? `<div class="doc-info">📝 ${doc.subject}</div>` : ''}
-                    ${doc.recipient ? `<div class="doc-info">👤 ${doc.recipient}</div>` : ''}
-                    <div class="doc-info">
-                        📅 ${new Date(doc.date).toLocaleDateString('zh-TW')}
-                        <span class="status-badge status-${doc.status}">
-                            ${doc.status === 'temp' ? '臨時' : '完成'}
-                        </span>
-                    </div>
-                    ${doc.files && doc.files.length > 0 ? `
-                        <div class="doc-info">📎 ${doc.files.length} 個附件</div>
-                    ` : ''}
-                    <div class="doc-actions">
-                        ${doc.status === 'temp' ? `
-                            <button class="btn btn-primary" onclick="completeDocumentMobile(${doc.id})">
-                                完成
-                            </button>
-                        ` : ''}
-                        <button class="btn btn-secondary" onclick="editDocumentMobile(${doc.id})">
-                            編輯
-                        </button>
-                        <button class="btn btn-danger" onclick="deleteDocumentMobile(${doc.id})">
-                            刪除
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function completeDocument(id) {
-            editDocument(id, true);
-        }
-
-        function completeDocumentMobile(id) {
-            editDocumentMobile(id, true);
-        }
-
-        function editDocument(id, isCompleting = false) {
+        // ========== 編輯文件 ==========
+        function editDocument(id) {
             const doc = documents.find(d => d.id === id);
             if (!doc) return;
 
             document.getElementById('editDocId').value = id;
             document.getElementById('editSubject').value = doc.subject || '';
             document.getElementById('editRecipient').value = doc.recipient || '';
-            document.getElementById('editModal').classList.add('active');
-
-            if (isCompleting) {
-                document.querySelector('#editModal .card-title span:last-child').textContent = '完成文號建檔';
-            } else {
-                document.querySelector('#editModal .card-title span:last-child').textContent = '編輯文號';
-            }
+            document.getElementById('editModal').classList.remove('hidden');
         }
 
-        function editDocumentMobile(id, isCompleting = false) {
-            editDocument(id, isCompleting);
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').classList.remove('active');
-        }
-
-        document.getElementById('editForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
+        function submitEdit() {
             const id = parseInt(document.getElementById('editDocId').value);
             const subject = document.getElementById('editSubject').value.trim();
             const recipient = document.getElementById('editRecipient').value.trim();
@@ -1572,14 +672,12 @@
 
             saveDocuments();
             renderDocuments();
-            renderDocumentsMobile();
             updateStats();
-            updateStatsMobile();
             closeEditModal();
-
             showToast('✅ 已更新文號資料');
-        });
+        }
 
+        // ========== 刪除文件 ==========
         function deleteDocument(id) {
             if (!confirm('確定要刪除這個文號嗎？')) return;
 
@@ -1587,44 +685,133 @@
             saveDocuments();
             renderDocuments();
             updateStats();
-            showToast('✅ 已刪除文號');
+            showToast('🗑️ 已刪除文號');
         }
 
-        function deleteDocumentMobile(id) {
-            if (!confirm('確定要刪除這個文號嗎？')) return;
-
-            documents = documents.filter(d => d.id !== id);
-            saveDocuments();
-            renderDocumentsMobile();
-            updateStatsMobile();
-            showToast('✅ 已刪除文號');
+        // ========== 完成建檔 ==========
+        function completeDocument(id) {
+            editDocument(id);
         }
 
-        function viewFiles(id) {
-            const doc = documents.find(d => d.id === id);
-            if (!doc || !doc.files || doc.files.length === 0) return;
+        // ========== 渲染文件列表 ==========
+        function renderDocuments() {
+            const docList = document.getElementById('docList');
+            const emptyState = document.getElementById('emptyState');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
 
-            doc.files.forEach(file => {
-                const link = document.createElement('a');
-                link.href = file.data;
-                link.download = file.name;
-                link.click();
+            let filtered = documents.filter(doc => {
+                const matchSearch = !searchTerm || 
+                    doc.docNumber.toLowerCase().includes(searchTerm) ||
+                    (doc.subject && doc.subject.toLowerCase().includes(searchTerm)) ||
+                    (doc.recipient && doc.recipient.toLowerCase().includes(searchTerm));
+                
+                const matchFilter = currentFilter === 'all' || doc.status === currentFilter;
+
+                return matchSearch && matchFilter;
             });
+
+            if (filtered.length === 0) {
+                docList.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            docList.innerHTML = filtered.map(doc => {
+                const date = new Date(doc.date);
+                const formattedDate = `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+                
+                const isTemp = doc.status === 'temp';
+                const companyName = COMPANIES.find(c => c.code === doc.companyCode)?.name || doc.companyCode;
+
+                return `
+                    <article class="group relative transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="absolute -inset-[1px] bg-gradient-to-b from-glam-gold-300 via-glam-gold-600 to-transparent rounded-2xl opacity-60 group-hover:opacity-100 blur-[2px] transition-opacity duration-500"></div>
+                        <div class="relative bg-[#161616] rounded-2xl p-0 overflow-hidden shadow-card-emboss border border-white/5">
+                            <div class="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/40 pointer-events-none"></div>
+                            <div class="absolute right-0 top-0 w-32 h-32 bg-glam-gold-500/10 blur-[50px] rounded-full"></div>
+                            
+                            <div class="bg-gradient-to-r from-glam-gold-900/40 to-transparent px-5 py-3 border-b border-white/5 flex justify-between items-center relative">
+                                <div class="flex items-center gap-2">
+                                    ${isTemp ? `
+                                        <div class="w-1.5 h-1.5 rounded-full bg-glam-gold-400 shadow-[0_0_8px_#D4AF37]"></div>
+                                        <span class="text-[10px] font-display font-bold tracking-[0.2em] text-glam-gold-300 uppercase">Priority High</span>
+                                    ` : `
+                                        <div class="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_8px_#22c55e]"></div>
+                                        <span class="text-[10px] font-display font-bold tracking-[0.2em] text-green-300 uppercase">Completed</span>
+                                    `}
+                                </div>
+                                <span class="text-[10px] font-serif italic text-white/40">${formattedDate}</span>
+                            </div>
+
+                            <div class="p-5 pt-4 relative">
+                                <div class="mb-4">
+                                    <!-- 金色發光框文號 -->
+                                    <div class="inline-block px-4 py-2 mb-3 bg-gradient-to-r from-glam-gold-900/40 to-glam-gold-700/40 border-2 border-glam-gold-400/80 rounded-lg shadow-[0_0_20px_rgba(212,175,55,0.5)]">
+                                        <span class="block text-base font-bold tracking-wider text-glam-gold-200 font-mono drop-shadow-[0_2px_8px_rgba(212,175,55,0.8)]">${doc.docNumber}</span>
+                                    </div>
+                                    <h3 class="text-sm font-serif text-white/70 leading-tight tracking-wide">
+                                        ${companyName}
+                                    </h3>
+                                    ${doc.subject ? `<p class="text-sm text-white/60 mt-2 font-light">📝 ${doc.subject}</p>` : ''}
+                                    ${doc.recipient ? `<p class="text-sm text-white/60 mt-1 font-light">👤 ${doc.recipient}</p>` : ''}
+                                </div>
+
+                                <div class="flex flex-wrap gap-2 mb-6">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-sm border ${isTemp ? 'border-glam-gold-500/30 bg-glam-gold-500/10 text-glam-gold-300' : 'border-green-500/30 bg-green-500/10 text-green-300'} text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                                        <span class="material-icons-round text-[10px] mr-1">${isTemp ? 'bolt' : 'check_circle'}</span> 
+                                        ${isTemp ? '臨時' : '已完成'}
+                                    </span>
+                                </div>
+
+                                <div class="grid ${isTemp ? 'grid-cols-4' : 'grid-cols-3'} gap-3 pt-4 border-t border-white/5 relative">
+                                    ${isTemp ? `
+                                        <button onclick="completeDocument(${doc.id})" class="col-span-2 relative overflow-hidden group/btn rounded-lg">
+                                            <div class="absolute inset-0 bg-gold-plate"></div>
+                                            <div class="absolute inset-0 bg-white/20 opacity-0 group-hover/btn:opacity-100 transition-opacity"></div>
+                                            <div class="relative py-2.5 flex items-center justify-center gap-2 text-black font-bold text-xs tracking-wide">
+                                                <span class="material-icons-round text-sm">check_circle</span>
+                                                <span>完成</span>
+                                            </div>
+                                        </button>
+                                    ` : ''}
+                                    <button onclick="editDocument(${doc.id})" class="col-span-1 py-2.5 bg-[#222] hover:bg-[#2a2a2a] text-glam-gold-300 border border-white/10 hover:border-glam-gold-500/30 rounded-lg flex items-center justify-center transition-all">
+                                        <span class="material-icons-round text-lg">edit</span>
+                                    </button>
+                                    <button onclick="deleteDocument(${doc.id})" class="col-span-1 py-2.5 bg-[#222] hover:bg-red-900/20 text-gray-500 hover:text-red-400 border border-white/10 hover:border-red-500/30 rounded-lg flex items-center justify-center transition-all">
+                                        <span class="material-icons-round text-lg">delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
         }
 
-        function setupSearch() {
-            document.getElementById('searchInput').addEventListener('input', renderDocuments);
-            document.getElementById('searchInputMobile').addEventListener('input', renderDocumentsMobile);
+        // ========== 篩選功能 ==========
+        function setFilter(filter) {
+            currentFilter = filter;
+            
+            // 更新按鈕樣式
+            ['all', 'temp', 'complete'].forEach(f => {
+                const btn = document.getElementById(`filter-${f}`);
+                if (f === filter) {
+                    btn.className = 'flex-shrink-0 px-4 py-2 bg-gradient-to-r from-glam-gold-500 to-glam-gold-700 text-black font-bold text-xs rounded-lg shadow-[0_4px_12px_rgba(212,175,55,0.3)] border border-glam-gold-300/50 flex items-center gap-1';
+                } else {
+                    btn.className = 'flex-shrink-0 px-4 py-2 bg-white/5 text-gray-400 border border-white/10 hover:border-glam-gold-500/50 rounded-lg text-xs font-medium tracking-wide transition-all hover:bg-white/10';
+                }
+            });
+
+            renderDocuments();
         }
 
         function filterDocuments() {
             renderDocuments();
         }
 
-        function filterDocumentsMobile() {
-            renderDocumentsMobile();
-        }
-
+        // ========== 統計功能 ==========
         function updateStats() {
             const total = documents.length;
             const complete = documents.filter(d => d.status === 'complete').length;
@@ -1634,56 +821,19 @@
                 new Date(d.date).toDateString() === today
             ).length;
 
-            document.getElementById('totalCount').textContent = total;
-            document.getElementById('completeCount').textContent = complete;
             document.getElementById('tempCount').textContent = temp;
-            document.getElementById('todayCount').textContent = todayCount;
+            document.getElementById('totalCountDisplay').textContent = total;
+            document.getElementById('completeCountDisplay').textContent = complete;
+            document.getElementById('tempCountDisplay').textContent = temp;
+            document.getElementById('todayCountDisplay').textContent = todayCount;
         }
 
-        function updateStatsMobile() {
-            const total = documents.length;
-            const complete = documents.filter(d => d.status === 'complete').length;
-            const temp = documents.filter(d => d.status === 'temp').length;
-            const today = new Date().toDateString();
-            const todayCount = documents.filter(d => 
-                new Date(d.date).toDateString() === today
-            ).length;
-
-            document.getElementById('totalCountMobile').textContent = total;
-            document.getElementById('completeCountMobile').textContent = complete;
-            document.getElementById('tempCountMobile').textContent = temp;
-            document.getElementById('todayCountMobile').textContent = todayCount;
-
-            updateDetailedStats();
+        function showStats() {
+            const statsPanel = document.getElementById('statsPanel');
+            statsPanel.classList.toggle('hidden');
         }
 
-        function updateDetailedStats() {
-            const detailedStats = document.getElementById('detailedStatsMobile');
-            const companyStats = {};
-            
-            documents.forEach(doc => {
-                if (!companyStats[doc.companyCode]) {
-                    companyStats[doc.companyCode] = 0;
-                }
-                companyStats[doc.companyCode]++;
-            });
-
-            const statsHTML = Object.entries(companyStats)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 5)
-                .map(([company, count]) => `
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        <span>${company}</span>
-                        <span style="color: var(--neon-blue); font-weight: bold;">${count} 筆</span>
-                    </div>
-                `).join('');
-
-            detailedStats.innerHTML = `
-                <div style="margin-bottom: 10px; opacity: 0.8;">使用最多的公司（前 5 名）</div>
-                ${statsHTML || '<div style="opacity: 0.5; text-align: center; padding: 20px;">暫無資料</div>'}
-            `;
-        }
-
+        // ========== 資料儲存與載入 ==========
         function saveDocuments() {
             localStorage.setItem('documents', JSON.stringify(documents));
         }
@@ -1692,20 +842,17 @@
             const saved = localStorage.getItem('documents');
             if (saved) {
                 documents = JSON.parse(saved);
-                renderDocuments();
-                renderDocumentsMobile();
-                updateStats();
-                updateStatsMobile();
             }
         }
 
+        // ========== CSV 匯出 ==========
         function exportToCSV() {
             if (documents.length === 0) {
                 showToast('目前沒有資料可以匯出', 'warning');
                 return;
             }
 
-            const headers = ['文號', '公司代碼', '部門代碼', '狀態', '主旨', '受文者', '建立日期', '附件數量'];
+            const headers = ['文號', '公司代碼', '部門代碼', '狀態', '主旨', '受文者', '建立日期'];
             const rows = documents.map(doc => [
                 doc.docNumber,
                 doc.companyCode,
@@ -1713,8 +860,7 @@
                 doc.status === 'temp' ? '臨時號碼' : '已完成',
                 doc.subject || '',
                 doc.recipient || '',
-                new Date(doc.date).toLocaleString('zh-TW'),
-                doc.files ? doc.files.length : 0
+                new Date(doc.date).toLocaleString('zh-TW')
             ]);
 
             let csvContent = '\uFEFF';
@@ -1731,9 +877,11 @@
             link.setAttribute('download', `發文管理系統_${new Date().toISOString().split('T')[0]}.csv`);
             link.click();
 
-            showToast('✅ CSV 檔案已下載');
+            showToast('📊 CSV 檔案已下載');
+            closeSettingsModal();
         }
 
+        // ========== 清空資料 ==========
         function confirmClearAll() {
             if (!confirm('⚠️ 確定要清空所有資料嗎？此操作無法復原！')) return;
             if (!confirm('⚠️ 最後確認：真的要刪除所有文號資料嗎？')) return;
@@ -1741,36 +889,23 @@
             documents = [];
             saveDocuments();
             renderDocuments();
-            renderDocumentsMobile();
             updateStats();
-            updateStatsMobile();
-
-            showToast('✅ 已清空所有資料');
+            closeSettingsModal();
+            showToast('🗑️ 已清空所有資料');
         }
 
+        // ========== Toast 通知 ==========
         function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = message;
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
             
-            if (type === 'warning') {
-                toast.style.background = 'var(--warning)';
-            } else if (type === 'danger') {
-                toast.style.background = 'var(--danger)';
-            }
-
-            document.body.appendChild(toast);
+            toastMessage.textContent = message;
+            toast.classList.remove('hidden');
 
             setTimeout(() => {
-                toast.remove();
+                toast.classList.add('hidden');
             }, 3000);
         }
-
-        document.getElementById('editModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeEditModal();
-            }
-        });
     </script>
 </body>
 </html>

@@ -1,167 +1,199 @@
-# 📄 發文管理系統
+# 📄 GOLDEN DMS - 發文管理系統 V1.1
 
-一個功能完整的發文編號生成與管理系統，採用現代化深色霓虹風格設計。
+> 黑金奢華風格的專業發文字號管理系統
 
-![系統預覽](https://img.shields.io/badge/version-1.0.0-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+![Version](https://img.shields.io/badge/version-1.1-gold)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Status](https://img.shields.io/badge/status-stable-success)
 
-## ✨ 主要功能
+## ✨ 系統特色
 
-### 🔢 智能編號生成
-- **自動編號**：依照規則自動生成發文字號
-- **格式規範**：公司代號 + 部門代碼 + 第 + 民國年月日 + 流水號
-- **防重複**：自動計算當日流水號，確保不重複
-- **自訂公司**：支援「其他」選項自行輸入公司代號
+### 🎨 視覺設計
+- **黑金奢華風格**：深黑色背景搭配金色漸層，展現專業品質
+- **玻璃擬態效果**：柔和的霧面質感與動態光暈
+- **響應式設計**：完美適配手機、平板、電腦
+- **Material Icons**：圓潤現代的圖示系統
 
-### 📋 發文管理
-- **兩階段流程**：
-  - 先生成編號暫存，待簽核後補完資料
-  - 或直接生成編號並完整填寫資料
-- **狀態追蹤**：待補資料 / 已完成
-- **檔案上傳**：支援多檔案上傳（最大 10MB）
-- **拖曳上傳**：支援拖放檔案到上傳區
+### 🚀 核心功能
+- ✅ 發文字號自動生成（格式：公司代碼+部門代碼+字+第+日期+流水號+號）
+- ✅ 臨時號碼快速產生
+- ✅ 自訂發文日期
+- ✅ 公司/部門選擇（53家公司、22個部門）
+- ✅ 自訂公司代碼
+- ✅ 智能流水號防重複
+- ✅ 即時搜尋與篩選
+- ✅ 編輯與刪除功能
+- ✅ 統計資料儀表板
+- ✅ CSV 匯出功能
+- ✅ 本地儲存（不需伺服器）
 
-### 🔍 搜尋與篩選
-- **多條件搜尋**：發文字號、主旨
-- **公司別篩選**：支援 54 家公司篩選
-- **狀態篩選**：待補資料 / 已完成
+## 📦 檔案結構
 
-### 📊 統計報表
-- **即時統計**：總發文數、待補資料、已完成、今日發文
-- **報表匯出**：依年度和公司別匯出 CSV 格式
-
-### 🎨 設計特色
-- **深色主題**：科技感霓虹配色
-- **響應式設計**：支援桌機、平板、手機
-- **流暢動畫**：卡片動畫、按鈕效果、發光特效
-- **現代字體**：Orbitron（科技感）+ Noto Sans TC（中文）
+```
+發文管理系統/
+├── index.html          # 主程式（單一檔案，開箱即用）
+├── README.md           # 使用說明（本檔案）
+├── LICENSE             # MIT 授權條款
+└── docs/
+    ├── 使用手冊.md      # 詳細操作說明
+    └── 部署指南.md      # 部署教學
+```
 
 ## 🚀 快速開始
 
-### 線上使用
-直接下載 `index.html` 檔案，用瀏覽器開啟即可使用。
+### 方法一：直接開啟（最簡單）
+1. 下載 `index.html`
+2. 用瀏覽器開啟檔案
+3. 立即開始使用！
 
-### 本地部署
+### 方法二：本地伺服器
 ```bash
-# 克隆專案
-git clone https://github.com/your-username/document-management-system.git
-
-# 進入目錄
-cd document-management-system
-
-# 直接開啟 index.html
-# 或使用本地伺服器
+# 使用 Python 啟動簡易伺服器
 python -m http.server 8000
-# 瀏覽器訪問 http://localhost:8000
+
+# 或使用 Node.js
+npx http-server
 ```
+然後開啟瀏覽器訪問 `http://localhost:8000`
 
-## 📖 使用說明
+### 方法三：GitHub Pages 部署
+1. 上傳到 GitHub 倉庫
+2. 進入 Settings > Pages
+3. 選擇 main 分支
+4. 系統自動部署完成！
 
-### 發文編號格式
+## 💡 使用方式
+
+### 新增文號
+1. 點擊底部中央的 ➕ **新增** 按鈕
+2. 選擇公司與部門
+3. 選擇發文日期
+4. 填寫主旨與受文者（選填）
+5. 點擊「完整建檔」或「臨時號碼」
+
+### 管理文號
+- **搜尋**：使用頂部搜尋框
+- **篩選**：點擊「全部文件」、「臨時號碼」、「已完成」
+- **編輯**：點擊文件卡片中的 ✏️ 按鈕
+- **刪除**：點擊文件卡片中的 🗑️ 按鈕
+- **完成**：臨時號碼可點擊「完成」按鈕補充資料
+
+### 查看統計
+點擊右上角的 📊 統計按鈕，查看：
+- 總文號數
+- 已完成數量
+- 臨時號碼數量
+- 今日新增數量
+
+### 匯出資料
+1. 點擊底部右側 ⚙️ **設定** 按鈕
+2. 點擊「匯出 CSV 檔案」
+3. 檔案會自動下載
+
+## 🏢 公司與部門清單
+
+### 支援的公司（53家）
+宇軒能源、宇軒綠能、兆明升、兆飛鴻、兆明科技、晁星能源、永煜能源、晁田能源、晶天下、昊陽電業、浩陽精工、浩陽電業、利高光電、雪芙、宸君投資、利晁光電、昊田、介碩、昊天、昊能、永恩電業、昊克、昊鴻、昊恩、昊碩、昊明電業、昊升電業、宇軒電業、昊瑞電業、昊瑞、昊儒、昊煜電業、昊升一號、昊升二號、昊升三號、昊軒一號、昊軒二號、昊軒三號、晁明電業、昊明綠能、晁明一號、晁明二號、晁明三號、昊儒電業、昊星電業、昊升、兆明升電業、兆明升一號、兆明升二號、昊勤能源、昊農、浩陽養殖、嘉義算力
+
+### 支援的部門（22個）
+稽核室、總經理室、法務室、財務處、財務部、會計部、總管理處、人資部、管理部、資訊部、品質管理部、採購處、採購部、倉管部、工程管理處、工程部、維運部、設計規劃處、設計規劃部、事業開發暨專案管理處、業務部、新產品事業部
+
+## 📱 系統需求
+
+- **瀏覽器**：Chrome 90+、Firefox 88+、Safari 14+、Edge 90+
+- **裝置**：電腦、平板、智慧型手機
+- **網路**：首次載入需要網路（載入字體與圖示），之後可離線使用
+- **儲存**：使用瀏覽器 localStorage（無需資料庫）
+
+## 🔒 資料安全
+
+- ✅ 所有資料儲存在本地瀏覽器
+- ✅ 不會上傳到任何伺服器
+- ✅ 資料隨時可匯出備份
+- ✅ 使用相同瀏覽器資料會保留
+- ⚠️ 清除瀏覽器資料會導致資料遺失（建議定期匯出備份）
+
+## 🎯 文號格式說明
+
+**格式**：`公司代碼` + `部門代碼` + `字` + `第` + `民國年月日` + `流水號` + `號`
+
+**範例**：
+- `昊陽財務字第11412300001號`
+  - 公司：昊陽
+  - 部門：財務
+  - 日期：114年12月30日
+  - 流水號：0001
+
+**智能流水號**：
+- 系統會自動計算當日同公司同部門的文號數量
+- 流水號從 0001 開始，自動遞增
+- 防止重複編號
+
+## 🛠️ 技術架構
+
+- **前端框架**：純 HTML + JavaScript（無需安裝依賴）
+- **CSS 框架**：Tailwind CSS（CDN）
+- **字體**：Google Fonts
+  - Noto Sans TC（繁體中文）
+  - Playfair Display（襯線英文）
+  - Cinzel（標題英文）
+- **圖示**：Material Icons Round
+- **儲存**：localStorage API
+- **相容性**：ES6+ JavaScript
+
+## 📝 版本歷史
+
+### V1.1 (2024-12-30) - Golden Edition
+- ✨ 全新黑金奢華風格設計
+- ✨ 新增發文日期選擇功能
+- ✨ 金色發光框文號顯示
+- 🎨 優化視覺層次與對比
+- 🐛 修復已知問題
+
+### V1.0 (2024-12-29)
+- 🎉 首次發布
+- ✅ 基礎文號管理功能
+- ✅ 公司與部門資料建置
+- ✅ 智能流水號系統
+
+## 🤝 貢獻與回饋
+
+如有任何問題或建議，歡迎透過以下方式聯繫：
+- 📧 Email：[您的聯絡信箱]
+- 💬 Issues：[GitHub Issues 連結]
+
+## 📄 授權條款
+
+本專案採用 MIT License 授權
+
 ```
-格式：公司代號 + 部門代碼 + 第 + 民國年(3碼) + 月份(2碼) + 日期(2碼) + 流水號(3碼)
-範例：宇軒總執第1141229001
-```
-
-### 兩種使用流程
-
-#### 流程一：先取號，後補資料
-1. 左側選擇公司、部門、日期
-2. 點擊「生成並暫存」
-3. 編號儲存，狀態為「待補資料」
-4. 等拿到簽核文件後
-5. 在下方表格找到該編號，點「補完資料」
-6. 填寫完整資訊並上傳檔案
-
-#### 流程二：直接完成
-1. 左側選擇公司、部門、日期
-2. 點擊「生成並完成」
-3. 右側自動帶入編號
-4. 直接填寫完整資訊
-5. 上傳附件檔案
-6. 儲存完成
-
-### 支援的公司
-系統內建 54 家公司，包括：
-- 宇軒能源科技股份有限公司
-- 宇軒綠能股份有限公司
-- 兆明升股份有限公司
-- 兆飛鴻有限公司
-- 兆明科技股份有限公司
-- 寵星能源有限公司
-- ... 等共 54 家
-
-如公司不在列表中，可選擇「其他」自行輸入。
-
-### 支援的部門
-系統內建 23 個部門，包括：
-- 稽核室
-- 總經理室
-- 法務室
-- 財務處
-- 財務部
-- 會計部
-- 總管理處
-- 人資部
-- 管理部
-- 資訊部
-- ... 等共 23 個部門
-
-## 💾 資料儲存
-
-- **本地儲存**：所有資料儲存在瀏覽器 localStorage
-- **無需伺服器**：純前端應用，無需後端
-- **資料安全**：資料僅存於使用者本機
-- **跨裝置使用**：每個裝置獨立資料庫
-
-## 🖥️ 系統需求
-
-### 瀏覽器支援
-- Chrome 90+
-- Edge 90+
-- Firefox 88+
-- Safari 14+
-
-### 螢幕解析度
-- 最佳：1920x1080 或以上
-- 支援：1366x768 或以上
-- 移動裝置：完整響應式支援
-
-## 📝 更新日誌
-
-### v1.0.0 (2024-12-29)
-- ✨ 初始版本發布
-- 🎨 深色霓虹風格設計
-- 📋 完整的發文管理功能
-- 🔢 智能編號生成系統
-- 📎 檔案上傳功能
-- 🔍 搜尋與篩選
-- 📊 統計與報表匯出
-- 📱 響應式設計
-
-## 🤝 貢獻
-
-歡迎提交 Issue 和 Pull Request！
-
-## 📄 授權
-
 MIT License
 
-## 👨‍💻 作者
+Copyright (c) 2024
 
-您的名字
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-## 🙏 致謝
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-- 字體：Google Fonts (Orbitron, Noto Sans TC)
-- 設計靈感：現代科技儀表板
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 
-## 📧 聯絡方式
+## 🌟 致謝
 
-如有問題或建議，歡迎聯繫：
-- Email: your.email@example.com
-- GitHub: [@your-username](https://github.com/your-username)
+感謝所有使用本系統的使用者！
 
 ---
 
-⭐ 如果這個專案對您有幫助，請給個星星！
+**GOLDEN DMS** - 讓文件管理更優雅 ✨
